@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="kr.jkh.khbank.model.vo.MemberVO" alias="MemberVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.logVO" alias="logVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.AccountVO" alias="AccountVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.AccountLimitVO" alias="AccountLimitVO"/>
+	</typeAliases>
+</configuration>
