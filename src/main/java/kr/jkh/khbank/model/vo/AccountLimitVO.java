@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AccountLimitVO {
 	private int aclNum;
-	private String aclLimit;
+	private int aclLimit;
 	
 
 }

@@ -8,5 +8,12 @@
 		<typeAlias type="kr.jkh.khbank.model.vo.logVO" alias="logVO"/>
 		<typeAlias type="kr.jkh.khbank.model.vo.AccountVO" alias="AccountVO"/>
 		<typeAlias type="kr.jkh.khbank.model.vo.AccountLimitVO" alias="AccountLimitVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.DepositBalanceVO" alias="DepositBalanceVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.DepositVO" alias="DepositVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.DepositSubscriptionVO" alias="DepositSubscriptionVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.LoanRepaymentVO" alias="LoanRepaymentVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.LoanSubscriptionVO" alias="LoanSubscriptionVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.LoanVO" alias="LoanVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.TransactionVO" alias="TransactionVO"/>
 	</typeAliases>
 </configuration>

@@ -57,14 +57,17 @@ body {
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ms-auto">
-					<li class="nav-item"><a class="nav-link active" href="#">홈</a>
-					</li>
 					<li class="nav-item"><a class="nav-link" href="#services">서비스</a>
 					</li>
 					<li class="nav-item"><a class="nav-link" href="#about">소개</a>
 					</li>
 					<li class="nav-item"><a class="nav-link" href="#contact">연락처</a>
 					</li>
+					<c:if test="${member.meMaNum eq 2}">
+						<li class="nav-item">
+							<a class="nav-link" href="<c:url value='/admin/main'/>">관리</a>
+						</li>
+					</c:if>
 					<c:if test="${member != null }">
 						<li class="nav-item">
 							<a class="nav-link" href="<c:url value='/member/mypage'/>">내정보</a>
