@@ -86,21 +86,18 @@ public class AdminController {
 	public LoanVO getLoanNum(@RequestParam("laNum")  int laNum) {
 		return adminService.getLoanNum(laNum);
 	}
+	
+	@ResponseBody
 	@PostMapping("/admin/loanUpdate")
-	public String updateLoan(Model model,LoanVO loan,HttpSession session) {
-		MemberVO user = (MemberVO)session.getAttribute("member");
-		if(user.getMeMaNum() != 2) {
-			 model.addAttribute("msg","관리자가 아닙니다.");
-			 model.addAttribute("url","/"); 
-			 return "message"; 
+	public Map<String, Object> loanUpdate(@RequestBody LoanVO loan ,HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		MemberVO user = (MemberVO) session.getAttribute("member");
+		if(user.getMeMaNum() != 2 ||user == null) {
+			return null;
 		}
-		if(!adminService.loanUpdate(loan)) {
-			 model.addAttribute("msg","수정 실패 했습니다.");
-			 model.addAttribute("url","/"); 
-			 return "message"; 
-		}
-		
-		return "/admin/loanProduct";
-		
+		boolean res = adminService.loanUpdate(loan);
+		System.out.println("컨트롤러"+loan);
+		map.put("res", res);
+		return map;
 	}
 }

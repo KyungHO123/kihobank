@@ -96,7 +96,6 @@
 					                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					            </div>
 					            <div class="modal-body">
-					                <form action="<c:url value='/admin/loanUpdate'/>" method="post">
 					                    <input type="hidden" name="laNum" id="laNum1">
 					                    <div class="mb-3">
 					                        <label for="laName" class="form-label">상품명</label>
@@ -119,8 +118,7 @@
 					                        <label for="laOverdue" class="form-label">연체이자율 (%)</label>
 					                        <input type="number" class="form-control" id="laOverdue1" name="laOverdue" step="0.01" required>
 					                    </div>
-					                    <button type="submit" class="btn btn-primary w-100">저장</button>
-					                </form>
+					                    <button type="button" id="update" class="btn btn-primary w-100">저장</button>
 					            </div>
 					        </div>
 					    </div>
@@ -130,7 +128,7 @@
     </div> 
 <script type="text/javascript">
 
-
+const modal = new bootstrap.Modal(document.getElementById('editLoanModal'));
 function addProducts() {
 	$('#addBtn').on("click",function(){
 		let loan = {
@@ -281,7 +279,7 @@ getLoanList(cri);
 			            $('#laOverdue1').val(data.laOverdue); // 대출 한도
 
 			            // 모달 창 열기
-			            const modal = new bootstrap.Modal(document.getElementById('editLoanModal'));
+			         
 			            modal.show();
 			        },
 			        error: function () {
@@ -316,7 +314,40 @@ getLoanList(cri);
 		    });
 		}
 		
-	})		
+	});		
+	$(document).on("click","#update",function(){
+		let la = {
+				laNum: $("#laNum1").val(),
+				laName: $("#laName1").val(),
+		        laDetail: $("#laDetail1").val(),
+		        laInterest: parseFloat($("#laInterest1").val()),
+		        laLimitMin: parseFloat($("#laLimitMin1").val()),
+		        laLimitMax: parseFloat($("#laLimitMax1").val()),
+		        laOverdue: parseFloat($("#laOverdue1").val())
+		}
+		
+		$.ajax({
+	        url: '<c:url value="/admin/loanUpdate"/>', 
+	        type: 'POST',
+	        data: JSON.stringify(la),
+	      	contentType: "application/json; charset=utf-8",
+	      	dataType: "json",
+	        success: function (data) {
+	        	if(data.res){
+	        		alert("대출 상품을 수정했습니다.");
+	        		getLoanList(cri)
+	        		modal.hide();
+	        	}else{
+	        		alert("대출 상품 수정에 실패했습니다.");
+	        	}
+	         
+	        },
+	        error: function () {
+	            alert('대출 상품 데이터를 가져오는 데 실패했습니다.');
+	        }
+	    });
+		
+	})
 			  
 </script>
 </body>
