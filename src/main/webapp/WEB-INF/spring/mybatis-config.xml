@@ -15,5 +15,8 @@
 		<typeAlias type="kr.jkh.khbank.model.vo.LoanSubscriptionVO" alias="LoanSubscriptionVO"/>
 		<typeAlias type="kr.jkh.khbank.model.vo.LoanVO" alias="LoanVO"/>
 		<typeAlias type="kr.jkh.khbank.model.vo.TransactionVO" alias="TransactionVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.DepositTypeVO" alias="DepositTypeVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.MemberStateVO" alias="MemberStateVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.MemberAuthorityVO" alias="MemberAuthorityVO"/>
 	</typeAliases>
 </configuration>

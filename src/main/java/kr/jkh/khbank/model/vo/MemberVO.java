@@ -21,5 +21,8 @@ public class MemberVO {
 	private int meMaNum;
 	private int meMsNum;
 	
+	private MemberStateVO meState;
+	private MemberAuthorityVO meAuthority;
+	private AccountVO account;
 	private AccountLimitVO accountLimit;
 }

@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.LoanVO;
+import kr.jkh.khbank.model.vo.MemberAuthorityVO;
+import kr.jkh.khbank.model.vo.MemberStateVO;
 import kr.jkh.khbank.model.vo.MemberVO;
 import kr.jkh.khbank.pagination.Criteria;
 import kr.jkh.khbank.pagination.PageMaker;
@@ -77,7 +80,6 @@ public class AdminController {
 			return null;
 		}
 		boolean loan = adminService.deleteLoan(laNum);
-		System.out.println("컨트롤러"+loan);
 		map.put("loan", loan);
 		return map;
 	}
@@ -96,8 +98,79 @@ public class AdminController {
 			return null;
 		}
 		boolean res = adminService.loanUpdate(loan);
-		System.out.println("컨트롤러"+loan);
 		map.put("res", res);
 		return map;
 	}
+	
+	@GetMapping("/admin/depositProduct")
+	public String getDepositProduct(HttpSession session,Model model) {
+		MemberVO user = (MemberVO) session.getAttribute("member");
+		if(user == null || user.getMeMaNum() != 2) {
+			model.addAttribute("msg","로그인 후 이용바랍니다.");
+			model.addAttribute("url","/member/login");
+			return "message";
+		}
+		ArrayList<DepositTypeVO> type = adminService.getDepositTypeList();
+		model.addAttribute("type",type);
+		
+		return "/admin/depositProduct";
+	}
+	@GetMapping("/admin/members")
+	public String getMemberList(HttpSession session,Model model) {
+		MemberVO user = (MemberVO) session.getAttribute("member");
+		if(user == null || user.getMeMaNum() != 2) {
+			model.addAttribute("msg","로그인 후 이용바랍니다.");
+			model.addAttribute("url","/member/login");
+			return "message";
+		}
+		ArrayList<MemberStateVO> state = adminService.getMemberState();
+		ArrayList<MemberAuthorityVO> authority = adminService.getMemberauthority();
+		ArrayList<MemberVO> members = adminService.getMemberList();
+		for(MemberVO me : members) {
+			if(me.getMeMaNum() == 1) {
+				model.addAttribute("meSize",members.size());
+			}
+		}
+		
+		
+		/*
+		 * model.addAttribute("state",state); model.addAttribute("authority",authority);
+		 */
+		model.addAttribute("members",members);
+		
+		
+		return "/admin/members";
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/memberUpdate")
+	public Map<String, Object> memberUpdate(@RequestBody MemberVO member ,HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		MemberVO user = (MemberVO) session.getAttribute("member");
+		if(user.getMeMaNum() != 2 ||user == null) {
+			return null;
+		}
+		boolean res = adminService.adminMemberUpdate(member);
+		map.put("res", res);
+		return map;
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/memberList")
+	public Map<String, Object> memberList(@RequestBody Criteria cri) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		cri.setPerPageNum(10);
+		ArrayList<MemberVO> memberList = adminService.getAjaxMemberList(cri);
+		int totalCount = adminService.getTotalMemberCount(cri);
+		PageMaker pm = new PageMaker(10, cri, totalCount);
+		ArrayList<MemberStateVO> state = adminService.getMemberState();
+		ArrayList<MemberAuthorityVO> authority = adminService.getMemberauthority();
+		
+		map.put("state",state);
+		map.put("authority",authority);
+		map.put("memberList", memberList);
+		map.put("pm", pm);
+		return map;
+	}
+	
 }

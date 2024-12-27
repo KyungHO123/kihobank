@@ -10,7 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.jkh.khbank.dao.AdminDAO;
 import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
+import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.LoanVO;
+import kr.jkh.khbank.model.vo.MemberAuthorityVO;
+import kr.jkh.khbank.model.vo.MemberStateVO;
 import kr.jkh.khbank.model.vo.MemberVO;
 import kr.jkh.khbank.pagination.Criteria;
 
@@ -69,8 +72,57 @@ public class AdminServiceImp implements AdminService {
 		if (laNum <= 0) {
 			return false;
 		}
-		System.out.println("임플"+laNum);
 		return adDao.deleteLoan(laNum);
 
+	}
+
+	@Override
+	public ArrayList<DepositTypeVO> getDepositTypeList() {
+		return adDao.getDepositTypeList();
+	}
+
+	@Override
+	public ArrayList<MemberVO> getMemberList() {
+		// TODO Auto-generated method stub
+		return adDao.getMemberList();
+	}
+
+	@Override
+	public ArrayList<MemberStateVO> getMemberState() {
+		// TODO Auto-generated method stub
+		return adDao.getMemberState();
+	}
+
+	@Override
+	public ArrayList<MemberAuthorityVO> getMemberauthority() {
+		// TODO Auto-generated method stub
+		return adDao. getMemberauthority();
+	}
+
+	@Override
+	public boolean adminMemberUpdate(MemberVO member) {
+		if(member.getMeMaNum() <= 0 || member.getMeMsNum() <= 0) {
+			return false;
+		}
+		System.out.println(member + "임플");
+		return adDao.adminMemberUpdate(member);
+	}
+
+	@Override
+	public ArrayList<MemberVO> getAjaxMemberList(Criteria cri) {
+		if(cri == null) {
+			return null;
+		}
+		// TODO Auto-generated method stub
+		return adDao.getAjaxMemberList(cri);
+	}
+
+	@Override
+	public int getTotalMemberCount(Criteria cri) {
+		if(cri == null) {
+			return 0;
+		}
+		// TODO Auto-generated method stub
+		return adDao.getTotalMemberCount(cri);
 	}
 }

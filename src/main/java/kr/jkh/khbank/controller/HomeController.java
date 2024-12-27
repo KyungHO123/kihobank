@@ -41,6 +41,11 @@ public class HomeController {
 	@PostMapping("/member/login")
 	public String loginPost(Locale locale,HttpSession session,Model model,LoginDTO loginDTO,HttpServletRequest request) {
 		MemberVO user = memberService.login(loginDTO);
+		if(user.getMeMsNum() == 2 || user.getMeMsNum() == 3) {
+			model.addAttribute("msg","정지 혹은 탈퇴한 계정입니다.");
+			model.addAttribute("url","/");
+			return "message";
+		}
 			
 		if(user != null) {
 			
@@ -50,7 +55,6 @@ public class HomeController {
 			if(ip ==null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
 				ip = request.getRemoteAddr();
 			}
-			System.out.println(ip);
 			log.setLogIP(ip);
 			try {
 				memberService.insertLog(log);
