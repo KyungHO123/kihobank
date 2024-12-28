@@ -11,20 +11,19 @@
       
 </head>
 <body>
-      <div class="container mt-5">
+      <div class="container mt-5" style="max-width: 1500px;">
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
          	<h1 class="text-primary">회원 관리</h1>
 	         <c:choose>	
-	         	<c:when test="${members == null || member.meMaNum == 2 }">
-	         		<p>(회원수 : 0)</p>
+	         	<c:when test="${members != null}">
+	         		 <p>(회원수 : ${meSize -1})</p>
 	         	</c:when>
 	         	<c:otherwise>
-		            <p>(회원수 : ${meSize})</p>
+		        	    <p>(회원수 : 0)</p>
 	         	</c:otherwise>
 	         </c:choose>	
         </div>
-
         <!-- Search Bar -->
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="회원 검색" aria-label="회원 검색">
@@ -33,6 +32,8 @@
 
         <!-- Members Table -->
         <div class="table-responsive w-100">
+        	<h2 class="text-primary">회원 리스트</h2>
+        	<hr>
             <table class="table table-striped table-hover">
                 <thead class="table-primary">
                     <tr class="text-center">
@@ -141,7 +142,7 @@
          		 	 </option>	
 	            	`).join('');
 	                str += `
-	                	  <input type="hidden" value="${member.meID}" id="id">
+                	    <input type="hidden" value="${member.meID}" id="id">
 	                    <input type="hidden" value="${member.meName}" id="name">
 	                    <input type="hidden" value="${member.mePw}" id="pw">
 	                    <input type="hidden" value="${member.meEmail}" id="email">

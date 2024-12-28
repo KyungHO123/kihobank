@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
+import kr.jkh.khbank.model.vo.DepositVO;
 import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MemberAuthorityVO;
 import kr.jkh.khbank.model.vo.MemberStateVO;
@@ -43,6 +44,14 @@ public interface AdminDAO {
 	ArrayList<MemberVO> getAjaxMemberList(@Param("cri")Criteria cri);
 
 	int getTotalMemberCount(@Param("cri")Criteria cri);
+
+	boolean addDeposit(@Param("dp")DepositVO deposit);
+
+	ArrayList<DepositVO> getDepositList(@Param("cri") Criteria cri);
+
+	int getDpTotalCount(@Param("cri") Criteria cri);
+
+	DepositTypeVO getDepositType(@Param("num")int dpDtNum);
 	
 
 	 

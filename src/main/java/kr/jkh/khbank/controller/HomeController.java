@@ -113,8 +113,15 @@ public class HomeController {
 			return "message";
 		}
 		AccountVO ac = accountService.getMembetAccount(member.getMeID());
-		int balance = (int)ac.getAcBalance();
-		ac.setAcBalance(balance);
+		if(ac != null) { 
+			int balance = (int)ac.getAcBalance();
+			ac.setAcBalance(balance);
+			model.addAttribute("account",ac);
+			model.addAttribute("member",user);
+			
+			return "/member/mypage";
+		}
+		
 		
 		
 		model.addAttribute("account",ac);

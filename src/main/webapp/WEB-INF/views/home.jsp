@@ -11,7 +11,8 @@
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
 	rel="stylesheet">
-	<link href="../resources/css/bankCss.css" rel="stylesheet">
+<link href="<c:url value='/resources/css/bankCss'/>" rel="stylesheet">
+
 <style>
 body {
 	background-color: #f8f9fa;
@@ -68,7 +69,7 @@ body {
 							<a class="nav-link" href="<c:url value='/admin/main'/>">관리</a>
 						</li>
 					</c:if>
-					<c:if test="${member != null }">
+					<c:if test="${member != null && member.meMaNum ne 2}">
 						<li class="nav-item">
 							<a class="nav-link" href="<c:url value='/member/mypage'/>">내정보</a>
 						</li>

@@ -53,11 +53,10 @@
                     <input type="number" class="form-control deposit-input" id="dpInterest" name="dpInterest" placeholder="이자율을 입력하세요" step="0.01" required>
                 </div>
                 <div class="mb-3">
-	                <select class="form-control" name="dpDtNum">
+	                <select class="form-control" name="dpDtNum" id="dpDtNum">
 	                		<option value="" disabled selected>저축 상품 종류를 선택하세요.</option>
 		               	<c:forEach items="${type}" var="type">
 		               		<option value="${type.dtNum }">${type.dtName}</option>
-		               	
 		               	</c:forEach>
 	               	</select>
                	</div>
@@ -77,6 +76,7 @@
                         <th>상품 번호</th>
 			            <th>상품명</th>
 			            <th>이자율</th>
+			            <th>종류</th>
 			            <th>등록일</th>
 			            <th>관리</th>
                     </tr>
@@ -92,31 +92,27 @@
 					    <div class="modal-dialog">
 					        <div class="modal-content">
 					            <div class="modal-header">
-					                <h5 class="modal-title" id="editLoanModalLabel">대출상품 수정</h5>
+					                <h5 class="modal-title" id="editLoanModalLabel">저축상품 수정</h5>
 					                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					            </div>
 					            <div class="modal-body">
-					                    <input type="hidden" name="laNum" id="laNum1">
+					                    <input type="hidden" name="dpNum" id="laNum1">
 					                    <div class="mb-3">
 					                        <label for="laName" class="form-label">상품명</label>
-					                        <input type="text"  class="form-control" id="laName1" name="laName" required>
+					                        <input type="text"  class="form-control" id="laName1" name="dpName" required>
 					                    </div>
 					                    <div class="mb-3">
 					                        <label for="laDetail1" class="form-label">상품설명</label>
-					                        <textarea  class="form-control" id="laDetail1" name="laDetail" required></textarea>
+					                        <textarea  class="form-control" id="laDetail1" name="dpDetail" required></textarea>
 					                    </div>
 					                    <div class="mb-3">
 					                        <label for="laInterest" class="form-label">이자율 (%)</label>
-					                        <input type="number" class="form-control" id="laInterest1" name="laInterest" step="0.01" required>
+					                        <input type="number" class="form-control" id="laInterest1" name="dpInterest" step="0.01" required>
 					                    </div>
-					                    <div class="mb-3">
-					                        <label for="laLimitMax" class="form-label">대출한도</label>
-					                        <input type="number" class="form-control" id="laLimitMin1" name="laLimitMin" required>
-					                        <input type="number" class="form-control" id="laLimitMax1" name="laLimitMax" required>
-					                    </div>
+					                   
 					                     <div class="mb-3">
-					                        <label for="laOverdue" class="form-label">연체이자율 (%)</label>
-					                        <input type="number" class="form-control" id="laOverdue1" name="laOverdue" step="0.01" required>
+					                        <label for="laOverdue" class="form-label">상품 종류</label>
+					                        <input type="number" class="form-control" id="laOverdue1" name="dpDtNum" step="0.01" required>
 					                    </div>
 					                    <button type="button" id="update" class="btn btn-primary w-100">저장</button>
 					            </div>
@@ -128,7 +124,130 @@
     </div> 
 <script type="text/javascript">
 
-			  
+function addDeposit() {
+	$(document).on("click","#addBtn",function(){
+		let deposit = {
+				 dpName: $('#dpName').val().trim(), 
+		         dpDetail: $('#dpDetail').val().trim(),
+		         dpInterest: $('#dpInterest').val().trim(),
+		         dpDtNum: $('#dpDtNum').val()
+		}
+		if(deposit.dpName.length === 0 ||
+				deposit.dpDetail.length === 0||
+				deposit.dpInterest.length === 0){
+				alert("빈 칸을 작성해주세요.");
+				return;
+		}
+		 $.ajax({
+		      async: true,
+		      url: '<c:url value="/admin/depositAdd"/>',
+		      type: 'post',
+		      data: JSON.stringify(deposit),
+		      contentType: "application/json; charset=utf-8",
+		      dataType: "json",
+		      success: function (data){
+		    	  console.log(data)
+		    	  if(data.res){
+		    		  alert("저축 상품이 성공적으로 추가되었습니다!");
+		    		  $('.deposit-input').val('');
+		    		  getDepositList(cri)
+		    	  }else{
+		    		  alert("저축 상품 추가에 실패했습니다.");
+		    	  }
+		      },
+		      error: function(xhr, textStatus, errorThrown){
+		         console.log(xhr);
+		         console.log(textStatus);
+		      }
+		   });
+		
+	})
+}	
+addDeposit();
+
+let cri = {
+	      page : 1
+	   }
+getDepositList(cri);
+
+	   function getDepositList(cri){
+	      $.ajax({
+	         async : true,
+	         url : '<c:url value="/admin/depositList"/>', 
+	         type : 'post', 
+	         data : JSON.stringify(cri),
+	         contentType : "application/json; charset=utf-8",
+	         dataType : "json", 
+	         success : function (data){
+	        	 displayDepositList(data.depositList);
+	        	 displayDepositPagination(data.pm);
+	        	 
+	         }, 
+	         error : function(jqXHR, textStatus, errorThrown){
+
+	         }
+	      });
+	   }
+
+	   function displayDepositList(depositList) {
+		    let str = '';
+
+		    if (depositList && depositList.length > 0) {
+		    	depositList.forEach(function (dp) {
+		            str += `
+		                <tr>
+		                    <td>\${dp.dpNum}</td>
+		                    <td>\${dp.dpName}</td>
+		                    <td>\${dp.dpInterest * 100}%</td>
+		                    <td>\${dp.depositType.dtName}</td>
+		                    <td>\${dp.changeDate}</td>
+		                    <td>
+		                        <button class="btn btn-warning btn-sm " id="btn-btn-update" data-num="\${dp.dpNum}">수정</button>
+		                        <button class="btn btn-danger btn-sm"  id="btn-delete" data-num="\${dp.dpNum}">삭제</button>
+		                    </td>
+		                </tr>
+		            `;
+		        });
+		    } else {
+		        str = `
+		            <tr>
+		                <td colspan="6" class="text-center">등록된 저축 상품이 없습니다.</td>
+		            </tr>
+		        `;
+		    }
+
+		    // 테이블에 리스트 표시
+		    $('#tbody').html(str);
+		}
+	   
+	   function displayDepositPagination(pm){
+		      let str = '';
+		      if(pm.prev){
+		         str += `
+		         <li class="page-item">
+		            <a class="page-link" href="javascript:void(0);" data-page="\${pm.startPage - 1}">이전</a>
+		         </li>`;      
+		      }
+		      for(let i = pm.startPage; i<= pm.endPage; i++){
+		         let active = pm.cri.page == i ? 'active' : '';
+		         str += `
+		         <li class="page-item \${active}">
+		            <a class="page-link" href="javascript:void(0);" data-page="\${i}">\${i}</a>
+		         </li>`;   
+		      }
+		      
+		      if(pm.next){
+		         str += `
+		         <li class="page-item">
+		            <a class="page-link" href="javascript:void(0);" data-page="\${pm.endPage + 1}">다음</a>
+		         </li>`;   
+		      }
+		      $('.box-pagination>ul').html(str);
+		   }
+		   $(document).on('click','.box-pagination .page-link',function(){
+		      cri.page = $(this).data('page');
+		      getDepositList(cri);
+		   });  
 </script>
 </body>
 </html>

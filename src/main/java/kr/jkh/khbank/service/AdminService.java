@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
+import kr.jkh.khbank.model.vo.DepositVO;
 import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MemberAuthorityVO;
 import kr.jkh.khbank.model.vo.MemberStateVO;
@@ -38,6 +39,14 @@ public interface AdminService {
 	ArrayList<MemberVO> getAjaxMemberList(Criteria cri);
 
 	int getTotalMemberCount(Criteria cri);
+
+	boolean addDeposit(DepositVO deposit, MemberVO user);
+
+	ArrayList<DepositVO> getDepositList(Criteria cri);
+
+	int getDpTotalCount(Criteria cri);
+
+	DepositTypeVO getDepositType(int dpDtNum);
 
 
 

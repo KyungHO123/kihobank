@@ -109,11 +109,15 @@
 	    const formattedRemaining = remaining.replace(/\B(?=(\d{4})+(?!\d))/g, "-");
 	    return firstPart+"-"+secondPart+"-"+formattedRemaining;
 	}
-	$('#num').text(format1(${account.acNum}));
+	if(${account.acNum != null}){
+		$('#num').text(format1(${account.acNum}));
+	}
 	function format(num) {
 	    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
-	$('#balance').text(format(${account.acBalance}) + "원");
+	if(${account.acBalance != null}){
+		$('#balance').text(format(${account.acBalance}) + "원");
+	}
 </script>
 </body>
 </html>

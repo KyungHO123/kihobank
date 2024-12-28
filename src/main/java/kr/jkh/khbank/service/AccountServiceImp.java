@@ -52,6 +52,9 @@ public class AccountServiceImp implements AccountService {
 		List<AccountVO> accounts = acDao.acoountList();
 		
 		for(AccountVO account : accounts) {
+			if(account == null) {
+				return;
+			}
 			if(account.getAcInterest() > 0) {
 				double newBalance = account.getAcBalance() + (account.getAcBalance() * account.getAcInterest()/12); 
 				account.setAcBalance(newBalance);

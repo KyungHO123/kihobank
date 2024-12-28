@@ -17,6 +17,7 @@ public class DepositVO {
 	private int dpDtNum;// 상품 종류번호
 	private Date dpCreate;
 	
+	private DepositTypeVO depositType;
 	private AccountVO account;
 	private MemberVO member;
 	

@@ -26,6 +26,26 @@
     <collection property="account" ofType="AccountVO" 
         column="meID" select="getMeAccount"/>
 </resultMap>
+
+<resultMap id="depositMap" type="DepositVO">
+    <id property="dpNum" column="dpNum" />
+    <result property="dpName" column="dpName" />
+    <result property="dpDetail" column="dpDetail" />
+    <result property="dpInterest" column="dpInterest" />
+    <result property="dpDtNum" column="dpDtNum" />
+    <result property="dpCreate" column="dpCreate" />
+    <association property="depositType" javaType="DepositTypeVO">
+        <id property="dtNum" column="dpDtNum" />
+        <result property="dtName" column="dtName" />
+    </association>
+</resultMap>
+	<select id="getDepositType" resultType="DepositTypeVO">
+		select * from depositType where dtNum = #{num}
+	</select> 
+	<select id="selectAjaxDpType" resultType="DepositTypeVO">
+		select * from depositType
+	</select>
+
 	<select id="getMemberList" resultMap="memberMap">
 		select * from member
 	</select>
@@ -38,6 +58,10 @@
 	<select id="getMeState"	 resultType="MemberStateVO">
 		select * from memberState where msNum = #{meMsNum}
 	</select>
+	<insert id="addDeposit">
+		insert into deposit(dpName,dpDetail,dpInterest,dpDtNum,dpCreate)
+		values(#{dp.dpName},#{dp.dpDetail},#{dp.dpInterest},#{dp.dpDtNum},NOW())
+	</insert>
 
 	<insert id="addLoan">
 		insert into
@@ -103,5 +127,17 @@
 	<select id="getMemberauthority" resultType="MemberAuthorityVO">
 		select * from memberAuthority
 	</select>
+	
+	<select id="getDepositList" resultMap="depositMap">
+		select * from deposit
+		order by dpNum desc
+		limit
+		#{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	<select id="getDpTotalCount" resultType="int">
+		select count(*) from
+		deposit
+	</select>
+	
 	
 </mapper>

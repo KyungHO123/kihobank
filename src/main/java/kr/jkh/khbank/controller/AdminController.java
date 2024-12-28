@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.jkh.khbank.model.vo.DepositTypeVO;
+import kr.jkh.khbank.model.vo.DepositVO;
 import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MemberAuthorityVO;
 import kr.jkh.khbank.model.vo.MemberStateVO;
@@ -123,8 +124,6 @@ public class AdminController {
 			model.addAttribute("url","/member/login");
 			return "message";
 		}
-		ArrayList<MemberStateVO> state = adminService.getMemberState();
-		ArrayList<MemberAuthorityVO> authority = adminService.getMemberauthority();
 		ArrayList<MemberVO> members = adminService.getMemberList();
 		for(MemberVO me : members) {
 			if(me.getMeMaNum() == 1) {
@@ -133,9 +132,6 @@ public class AdminController {
 		}
 		
 		
-		/*
-		 * model.addAttribute("state",state); model.addAttribute("authority",authority);
-		 */
 		model.addAttribute("members",members);
 		
 		
@@ -169,6 +165,34 @@ public class AdminController {
 		map.put("state",state);
 		map.put("authority",authority);
 		map.put("memberList", memberList);
+		map.put("pm", pm);
+		return map;
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/depositAdd")
+	public Map<String, Object> depositAdd(@RequestBody DepositVO deposit, HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		MemberVO user = (MemberVO) session.getAttribute("member");
+		boolean res = adminService.addDeposit(deposit, user);
+		System.out.println(deposit);
+		
+		map.put("res", res);
+		return map;
+	}
+	@ResponseBody
+	@PostMapping("/admin/depositList")
+	public Map<String, Object> depositList(@RequestBody Criteria cri) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		cri.setPerPageNum(10);
+		ArrayList<DepositVO> depositList = adminService.getDepositList(cri);
+		for(DepositVO deposit : depositList) {
+			DepositTypeVO dt = adminService.getDepositType(deposit.getDpDtNum());
+			deposit.setDepositType(dt);
+		}
+		int totalCount = adminService.getDpTotalCount(cri);
+		PageMaker pm = new PageMaker(10, cri, totalCount);
+		map.put("depositList", depositList);
 		map.put("pm", pm);
 		return map;
 	}

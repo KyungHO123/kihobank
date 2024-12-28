@@ -37,20 +37,29 @@
             <h2 class="text-center mb-4">저축상품 관리</h2>
 
             <!-- 대출상품 추가 폼 -->
-            <h4 class="mb-4">저축상품 추가</h4>
+            <h4 class="mb-4">대출상품 추가</h4>
             <hr >
             <div id="addForm">
                 <div class="mb-3">
                     <label for="laName" class="form-label">상품명</label>
-                    <input type="text" class="form-control loan-input" id="laName" name="laName" placeholder="저축상품명을 입력하세요" required>
+                    <input type="text" class="form-control loan-input" id="laName" name="laName" placeholder="대출상품명을 입력하세요" required>
                 </div>
                 <div class="mb-3">
                     <label for="laDetail" class="form-label">상품 설명</label>
-                    <textarea  class="form-control loan-input" id="laDetail" name="laDetail" placeholder="저축상품설명을 입력하세요" required></textarea>
+                    <textarea  class="form-control loan-input" id="laDetail" name="laDetail" placeholder="대출상품설명을 입력하세요" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="laInterest" class="form-label">이자율 (%)</label>
                     <input type="number" class="form-control loan-input" id="laInterest" name="laInterest" placeholder="이자율을 입력하세요" step="0.01" required>
+                </div>
+                <div class="mb-3">
+                    <label for="laLimitMin" class="form-label">대출 한도</label>
+                    <input type="text" class="form-control loan-input" id="laLimitMin" name="laLimitMin" placeholder="이자율을 입력하세요" step="0.01" required>
+                    <input type="text" class="form-control loan-input" id="laLimitMax" name="laLimitMax" placeholder="이자율을 입력하세요" step="0.01" required>
+                </div>
+                 <div class="mb-3">
+                    <label for="laOverdue" class="form-label">연체 이자율 (%)</label>
+                    <input type="number" class="form-control loan-input" id="laOverdue" name="laOverdue" placeholder="이자율을 입력하세요" step="0.01" required>
                 </div>
                 
                </div>
@@ -62,7 +71,7 @@
             <hr class="mt-4 mb-4">
 
             <!-- 대출상품 목록 -->
-            <h4>저축상품 목록</h4>
+            <h4>대출상품 목록</h4>
             <table class="table table-striped " id="table-body">
                  <thead>
                     <tr class="text-center">

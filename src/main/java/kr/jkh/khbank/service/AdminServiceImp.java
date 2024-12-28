@@ -11,6 +11,7 @@ import kr.jkh.khbank.dao.AdminDAO;
 import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
+import kr.jkh.khbank.model.vo.DepositVO;
 import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MemberAuthorityVO;
 import kr.jkh.khbank.model.vo.MemberStateVO;
@@ -124,5 +125,34 @@ public class AdminServiceImp implements AdminService {
 		}
 		// TODO Auto-generated method stub
 		return adDao.getTotalMemberCount(cri);
+	}
+
+	@Override
+	public boolean addDeposit(DepositVO deposit, MemberVO user) {
+		if(user == null || user.getMeMaNum() == 1)
+			return false;
+		if(deposit == null)
+			return false;
+		return adDao.addDeposit(deposit);
+	}
+
+	@Override
+	public ArrayList<DepositVO> getDepositList(Criteria cri) {
+		if(cri == null)
+			return null;
+		return adDao.getDepositList(cri);
+	}
+
+	@Override
+	public int getDpTotalCount(Criteria cri) {
+		if(cri == null)
+			return 0;
+		return adDao.getDpTotalCount(cri);
+	}
+
+	@Override
+	public DepositTypeVO getDepositType(int dpDtNum) {
+		// TODO Auto-generated method stub
+		return adDao.getDepositType(dpDtNum);
 	}
 }
