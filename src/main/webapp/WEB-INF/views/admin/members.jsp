@@ -50,63 +50,6 @@
                 </thead>
                 <tbody id="tbody">
               
-	               <%--  <c:choose>
-	                	<c:when test="${members == null}">
-	                		<td colspan="10" class="text-center">등록된 회원이 없습니다.</td>
-	                	</c:when>
-	                	<c:otherwise>
-		                    <c:forEach var="member" items="${members}" >
-		                    	<c:if test="${member.meMaNum == 1}">
-		                    		<input type="hidden" value="${member.meID}" id="id">
-		                    		<input type="hidden" value="${member.meName}" id="name">
-		                    		<input type="hidden" value="${member.mePw}" id="pw">
-		                    		<input type="hidden" value="${member.meEmail}" id="email">
-		                    		<input type="hidden" value="${member.mePhone}" id="phone">
-		                    		<input type="hidden" value="${member.mePost}" id="post">
-		                    		<input type="hidden" value="${member.meStreet}" id="street">
-		                    		<input type="hidden" value="${member.meDetail}" id="detail">
-				                        <tr class="text-center">
-				                            <th scope="row" id="meID">${member.meID}</th>
-				                            <td>${member.meName}</td>
-				                            <c:if test="${member.account.acNum == null}">
-				                            	<td>없음</td>
-				                            </c:if>
-				                            <c:if test="${member.account.acNum != null}">
-				                            	<td>${member.account.acNum}</td>
-				                            </c:if>
-				                            <td>${member.meEmail}</td>
-				                            <td>${member.mePhone}</td>
-				                            <td>${member.meStreet}${member.meDetail}</td>
-				                            <td>
-					                            <select class="form-select" id="state">
-					                            	<option value="${member.meMsNum}">${member.meState.msName}</option>
-						                            <c:forEach items="${state}" var="meState">
-							                            <c:if test="${meState.msNum ne member.meMsNum}">
-														    <option value="${meState.msNum}">${meState.msName}</option>
-												        </c:if>
-						                            </c:forEach>
-					                            </select>
-				                            </td>
-				                            <td>
-				                            	<select class="form-select" id="authority">
-				                            		<option value="${member.meMaNum}">${member.meAuthority.maName}</option>
-				                            		<c:forEach items="${authority}" var="meAu">
-				                            			<c:if test="${meAu.maNum ne member.meMaNum}">
-				                            				<option value="${meAu.maNum }">${meAu.maName}</option>
-				                            			</c:if>	
-				                            		</c:forEach>
-				                            	</select>
-				                            </td>
-				                            <td>${member.meSignup}</td>
-				                            <td>
-				                                <button class="btn btn-sm btn-outline-primary" data-id="${member.meID }" id="update-btn">변경</button>
-				                                <button class="btn btn-sm btn-outline-danger">삭제</button>
-				                            </td>
-				                        </tr>
-				                   </c:if>     
-		                    </c:forEach>
-	       			    </c:otherwise>
-	                    </c:choose> --%>
                 </tbody>
             </table>
            	<div class="box-pagination">
@@ -176,11 +119,27 @@
 	   }
 	getMemberList(cri);
 	function displayMemberList(memberList, state, authority) {
+		console.log(state);
 	    let str = '';
 
 	    if (memberList && memberList.length > 0) {
 	    	memberList.forEach(function (member) {
-	            if (member.meMaNum === 1) {
+	            if (member.meMaNum == 1) {
+	            	let stateOption = state
+	            	.filter(item => item.msNum != member.meMsNum)
+	            	.map(item =>`
+	            	  <option value="${item.msNum}" >
+                  		  \${item.msName}
+               		  </option>`).join('');
+	            	
+	            	let authorityOption = authority
+	            	.filter(item => item.maNum != member.meMaNum)
+	            	.map(item =>
+	            	`
+	            	 <option value="${item.maNum}" >
+            		  \${item.maName}
+         		 	 </option>	
+	            	`).join('');
 	                str += `
 	                	  <input type="hidden" value="${member.meID}" id="id">
 	                    <input type="hidden" value="${member.meName}" id="name">
@@ -199,12 +158,14 @@
 		                    <td>${member.meStreet}${member.meDetail}</td>
 		                    <td>
 	                         <select class="form-select" id="state">
-	                            <option value="\${member.meMsNum}" selected>\${member.meState.msName}</option>
+	                         	<option value="${member.meMsNum}" selected>\${member.meState.msName}</option>
+	                            \${stateOption}
 	                        </select> 
 		                    </td>
 		                    <td>
 	                        <select class="form-select" id="authority">
 	                            <option value="${member.meMaNum}" selected>\${member.meAuthority.maName}</option>
+	                            \${authorityOption}
 	                        </select> 
 	                    </td>
 	                    <td>${member.meSignup}</td>
