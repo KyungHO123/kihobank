@@ -34,10 +34,10 @@
 <body>
     <div class="container">
         <div class="main-container">
-            <h2 class="text-center mb-4">대출상품 관리</h2>
+            <h2 class="text-center mb-4">저축상품 관리</h2>
 
-            <!-- 대출상품 추가 폼 -->
-            <h4 class="mb-4">대출상품 추가</h4>
+            <!-- 저축상품 추가 폼 -->
+            <h4 class="mb-4">저축상품 추가</h4>
             <hr >
             <div id="addForm">
                 <div class="mb-3">
@@ -68,7 +68,7 @@
 
             <hr class="mt-4 mb-4">
 
-            <!-- 대출상품 목록 -->
+            <!-- 저축상품 목록 -->
             <h4>저축상품 목록</h4>
             <table class="table table-striped " id="table-body">
                  <thead>
@@ -112,7 +112,12 @@
 					                   
 					                     <div class="mb-3">
 					                        <label for="laOverdue" class="form-label">상품 종류</label>
-					                        <input type="number" class="form-control" id="laOverdue1" name="dpDtNum" step="0.01" required>
+					                        <select name="dpDtNum" class="form-control">
+					                        	<option disabled>저축 한도를 선택하세요</option>
+					                        	<c:forEach items="${type}" var="dt">
+					                        		<option  value="${dt.dtNum}" >${dt.dtName}</option>
+					                        	</c:forEach>
+					                        </select>
 					                    </div>
 					                    <button type="button" id="update" class="btn btn-primary w-100">저장</button>
 					            </div>
@@ -123,7 +128,7 @@
         </div>
     </div> 
 <script type="text/javascript">
-
+const modal = new bootstrap.Modal(document.getElementById('editLoanModal'));
 function addDeposit() {
 	$(document).on("click","#addBtn",function(){
 		let deposit = {
@@ -248,6 +253,85 @@ getDepositList(cri);
 		      cri.page = $(this).data('page');
 		      getDepositList(cri);
 		   });  
+   
+   $(document).on("click","#btn-btn-update",function(){
+		let dpNum = $(this).data('num');
+		$.ajax({
+	        url: '<c:url value="/admin/getDpNum"/>', // 저축 상품 데이터를 가져올 API
+	        type: 'GET',
+	        data: { dpNum: dpNum },
+	        success: function (data) {
+	       
+	            $('#laNum1').val(data.dp.dpNum); // 저축 상품 번호
+	            $('#laName1').val(data.dp.dpName); // 상품명
+	            $('#laDetail1').val(data.dp.dpDetail); // 상품명
+	            $('#laInterest1').val(data.dp.dpInterest); // 이자율
+	            $('select[name="dpDtNum"]').val(data.dp.dpDtNum); // 저축 
+	         
+	            modal.show();
+	        },
+	        error: function () {
+	            alert('저축 상품 데이터를 가져오는 데 실패했습니다.');
+	        }
+	    });
+   })
+    $(document).on("click","#update",function(){
+    	let dp = {
+    			dpNum: $("#laNum1").val(),
+    			dpName: $("#laName1").val(),
+    			dpDetail: $("#laDetail1").val(),
+    			dpInterest: parseFloat($("#laInterest1").val()),
+    			dpDtNum: $('select[name="dpDtNum"]').val()
+		}
+		
+		$.ajax({
+	        url: '<c:url value="/admin/dpUpdate"/>', 
+	        type: 'POST',
+	        data: JSON.stringify(dp),
+	      	contentType: "application/json; charset=utf-8",
+	      	dataType: "json",
+	        success: function (data) {
+	        	if(data.res){
+	        		alert("저축 상품을 수정했습니다.");
+	        		getDepositList(cri);
+	        		modal.hide();
+	        	}else{
+	        		alert("저축 상품 수정에 실패했습니다.");
+	        	}
+	         
+	        },
+	        error: function () {
+	            alert('저축 상품 데이터를 가져오는 데 실패했습니다.');
+	        }
+	    });
+    })
+    
+    $(document).on('click','#btn-delete',function(){
+		let dpNum = $(this).data('num');
+		let c = confirm("정말 삭제하시겠습니까?");
+		if(!c){
+			return
+		}else{
+			$.ajax({
+		        url: '<c:url value="/admin/deleteDeposit"/>', // 저축 상품 데이터를 가져올 API
+		        type: 'POST',
+		        data: { dpNum: dpNum },
+		        success: function (data) {
+		        	if(data.deposit){
+		        		alert("저축 상품을 삭제했습니다.");
+		        		getDepositList(cri);
+		        	}else{
+		        		alert("저축 상품 삭제에 실패했습니다.");
+		        	}
+		         
+		        },
+		        error: function () {
+		            alert('저축 상품 데이터를 가져오는 데 실패했습니다.');
+		        }
+		    });
+		}
+		
+	});		
 </script>
 </body>
 </html>

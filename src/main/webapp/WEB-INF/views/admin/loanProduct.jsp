@@ -34,7 +34,7 @@
 <body>
     <div class="container">
         <div class="main-container">
-            <h2 class="text-center mb-4">저축상품 관리</h2>
+            <h2 class="text-center mb-4">대출상품 관리</h2>
 
             <!-- 대출상품 추가 폼 -->
             <h4 class="mb-4">대출상품 추가</h4>

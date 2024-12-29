@@ -36,7 +36,7 @@
 							<a class="nav-link" href="<c:url value='/admin/main'/>">관리</a>
 						</li>
 					</c:if>
-					<c:if test="${member != null }">
+					<c:if test="${member != null && member.meMaNum ne 2}">
 						<li class="nav-item">
 							<a class="nav-link" href="<c:url value='/member/mypage'/>">내정보</a>
 						</li>

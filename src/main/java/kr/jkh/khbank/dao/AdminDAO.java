@@ -52,6 +52,12 @@ public interface AdminDAO {
 	int getDpTotalCount(@Param("cri") Criteria cri);
 
 	DepositTypeVO getDepositType(@Param("num")int dpDtNum);
+
+	DepositVO getDepositNum(@Param("num")int dpNum);
+
+	boolean depositUpdate(@Param("dp")DepositVO deposit);
+
+	boolean depositDelete(@Param("num")int dpNum);
 	
 
 	 

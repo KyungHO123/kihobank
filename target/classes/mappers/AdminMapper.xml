@@ -106,6 +106,16 @@
 		WHERE
 		laNum = #{la.laNum}
 	</update>
+	<update id="depositUpdate">
+		UPDATE deposit
+		SET
+		dpName = #{dp.dpName},
+		dpInterest = #{dp.dpInterest},
+		dpDtNum = #{dp.dpDtNum},
+		dpDetail = #{dp.dpDetail}
+		WHERE
+		dpNum = #{dp.dpNum}
+	</update>
 	<update id="adminMemberUpdate">
 		UPDATE member
 		SET
@@ -117,6 +127,10 @@
 	<delete id="deleteLoan">
 		DELETE FROM loan
 		WHERE laNum = #{num}
+	</delete>
+	<delete id="depositDelete">
+		DELETE FROM deposit
+		WHERE dpNum = #{num}
 	</delete>
 	<select id="getDepositTypeList" resultType="DepositTypeVO">
 		select * from depositType
@@ -139,5 +153,8 @@
 		deposit
 	</select>
 	
+	<select id="getDepositNum" resultMap="depositMap">
+		select * from deposit where dpNum = #{num}
+	</select>
 	
 </mapper>

@@ -71,7 +71,7 @@ body {
 					</c:if>
 					<c:if test="${member != null && member.meMaNum ne 2}">
 						<li class="nav-item">
-							<a class="nav-link" href="<c:url value='/member/mypage'/>">내정보</a>
+							<a class="nav-link" href="<c:url value='/member/mypage?meId=${member.meID}'/>">내정보</a>
 						</li>
 					</c:if>
 					<c:if test="${member == null }">
@@ -108,7 +108,7 @@ body {
 						<div class="card-body">
 							<h5 class="card-title">대출 서비스</h5>
 							<p class="card-text">합리적인 이율과 다양한 상품을 제공하는 대출 서비스입니다.</p>
-							<a href="#" class="btn btn-primary">서비스 조회</a>
+							<a href="<c:url value='/loan/list'/>" class="btn btn-primary">서비스 조회</a>
 						</div>
 					</div>
 				</div>

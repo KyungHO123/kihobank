@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import kr.jkh.khbank.model.dto.LoginDTO;
 import kr.jkh.khbank.model.vo.AccountVO;
+import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
 import kr.jkh.khbank.model.vo.MemberVO;
 import kr.jkh.khbank.model.vo.logVO;
 import kr.jkh.khbank.service.AccountService;
+import kr.jkh.khbank.service.LoanService;
 import kr.jkh.khbank.service.MemberService;
 
  
@@ -27,6 +29,8 @@ public class HomeController {
 	private MemberService memberService;
 	@Autowired
 	private AccountService accountService;
+	@Autowired
+	private LoanService loanService;
 	
 	@GetMapping("/")
 	public String home(Locale locale, Model model,HttpSession session) {
@@ -165,5 +169,24 @@ public class HomeController {
 		}
 		return "message";
 	}
-	
+	@GetMapping("/member/asset")
+	public String asset(Locale locale, Model model,HttpSession session) {
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		AccountVO ac = accountService.getMembetAccount(member.getMeID());
+		LoanSubscriptionVO laSub = loanService.getMemberLoanSub(member.getMeID());
+		if(ac != null) { 
+			int balance = (int)ac.getAcBalance();
+			ac.setAcBalance(balance);
+			model.addAttribute("account",ac);
+			
+			return "/member/asset";
+		}
+		
+		
+		
+		model.addAttribute("laSub",laSub);
+		model.addAttribute("account",ac);
+		
+		return "/member/asset";
+	}
 }

@@ -48,6 +48,12 @@ public interface AdminService {
 
 	DepositTypeVO getDepositType(int dpDtNum);
 
+	DepositVO getDepositNum(int dpNum);
+
+	boolean depositUpdate(DepositVO deposit);
+
+	boolean deleteDeposit(int dpNum);
+
 
 
 

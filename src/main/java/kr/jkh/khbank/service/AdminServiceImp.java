@@ -155,4 +155,24 @@ public class AdminServiceImp implements AdminService {
 		// TODO Auto-generated method stub
 		return adDao.getDepositType(dpDtNum);
 	}
+
+	@Override
+	public DepositVO getDepositNum(int dpNum) {
+		// TODO Auto-generated method stub
+		return adDao.getDepositNum(dpNum);
+	}
+
+	@Override
+	public boolean depositUpdate(DepositVO deposit) {
+		if(deposit == null)
+			return false;
+		
+		return adDao.depositUpdate(deposit);
+	}
+
+	@Override
+	public boolean deleteDeposit(int dpNum) {
+		// TODO Auto-generated method stub
+		return  adDao.depositDelete(dpNum);
+	}
 }

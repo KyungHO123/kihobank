@@ -35,8 +35,17 @@ public class AdminController {
 	@GetMapping("/admin/main")
 	public String agree(Locale locale, Model model,HttpSession session) {
 		model.addAttribute("title","기호은행 - 관리자페이지");
-//		MemberVO member = (MemberVO)session.getAttribute("member");
-		
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		if(member == null) {
+			model.addAttribute("msg","로그인이 필요한 페이지입니다.");
+			model.addAttribute("url","/member/login");
+			return "message";
+		}
+		if(member.getMeMaNum() != 2) {
+			model.addAttribute("msg","접근할 수 없는 페이지입니다.");
+			model.addAttribute("url","/");
+			return "message";
+		}
 		
 		
 		return "/admin/main";
@@ -44,8 +53,17 @@ public class AdminController {
 	@GetMapping("/admin/loanProduct")
 	public String loanProduct(Locale locale, Model model,HttpSession session,LoanVO loan) {
 		model.addAttribute("title","기호은행 - 대출상품관리");
-//		MemberVO member = (MemberVO)session.getAttribute("member");
-		
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		if(member == null) {
+			model.addAttribute("msg","로그인이 필요한 페이지입니다.");
+			model.addAttribute("url","/member/login");
+			return "message";
+		}
+		if(member.getMeMaNum() != 2) {
+			model.addAttribute("msg","접근할 수 없는 페이지입니다.");
+			model.addAttribute("url","/");
+			return "message";
+		}
 		
 		
 		return "/admin/loanProduct";
@@ -105,10 +123,15 @@ public class AdminController {
 	
 	@GetMapping("/admin/depositProduct")
 	public String getDepositProduct(HttpSession session,Model model) {
-		MemberVO user = (MemberVO) session.getAttribute("member");
-		if(user == null || user.getMeMaNum() != 2) {
-			model.addAttribute("msg","로그인 후 이용바랍니다.");
+		MemberVO member = (MemberVO) session.getAttribute("member");
+		if(member == null) {
+			model.addAttribute("msg","로그인이 필요한 페이지입니다.");
 			model.addAttribute("url","/member/login");
+			return "message";
+		}
+		if(member.getMeMaNum() != 2) {
+			model.addAttribute("msg","접근할 수 없는 페이지입니다.");
+			model.addAttribute("url","/");
 			return "message";
 		}
 		ArrayList<DepositTypeVO> type = adminService.getDepositTypeList();
@@ -118,10 +141,15 @@ public class AdminController {
 	}
 	@GetMapping("/admin/members")
 	public String getMemberList(HttpSession session,Model model) {
-		MemberVO user = (MemberVO) session.getAttribute("member");
-		if(user == null || user.getMeMaNum() != 2) {
-			model.addAttribute("msg","로그인 후 이용바랍니다.");
+		MemberVO member = (MemberVO) session.getAttribute("member");
+		if(member == null) {
+			model.addAttribute("msg","로그인이 필요한 페이지입니다.");
 			model.addAttribute("url","/member/login");
+			return "message";
+		}
+		if(member.getMeMaNum() != 2) {
+			model.addAttribute("msg","접근할 수 없는 페이지입니다.");
+			model.addAttribute("url","/");
 			return "message";
 		}
 		ArrayList<MemberVO> members = adminService.getMemberList();
@@ -175,7 +203,6 @@ public class AdminController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		MemberVO user = (MemberVO) session.getAttribute("member");
 		boolean res = adminService.addDeposit(deposit, user);
-		System.out.println(deposit);
 		
 		map.put("res", res);
 		return map;
@@ -194,6 +221,41 @@ public class AdminController {
 		PageMaker pm = new PageMaker(10, cri, totalCount);
 		map.put("depositList", depositList);
 		map.put("pm", pm);
+		return map;
+	}
+	@ResponseBody
+	@GetMapping("/admin/getDpNum")
+	public Map<String, Object> getDpNum(@RequestParam("dpNum")  int dpNum) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		DepositVO dp = adminService.getDepositNum(dpNum);
+		DepositTypeVO dt = adminService.getDepositType(dp.getDpDtNum());
+		dp.setDepositType(dt);
+		map.put("dp", dp);
+		return map;
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/dpUpdate")
+	public Map<String, Object> dpUpdate(@RequestBody DepositVO deposit ,HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		MemberVO user = (MemberVO) session.getAttribute("member");
+		if(user.getMeMaNum() != 2 ||user == null) {
+			return null;
+		}
+		boolean res = adminService.depositUpdate(deposit);
+		map.put("res", res);
+		return map;
+	}
+	@ResponseBody
+	@PostMapping("/admin/deleteDeposit")
+	public Map<String, Object> deleteDeposit(@RequestParam("dpNum") int dpNum ,HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		MemberVO user = (MemberVO) session.getAttribute("member");
+		if(user.getMeMaNum() != 2) {
+			return null;
+		}
+		boolean deposit = adminService.deleteDeposit(dpNum);
+		map.put("deposit", deposit);
 		return map;
 	}
 	

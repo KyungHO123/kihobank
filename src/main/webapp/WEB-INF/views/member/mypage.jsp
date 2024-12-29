@@ -25,9 +25,6 @@
         .profile-header h2 {
             margin: 0;
         }
-        .btn-logout {
-            margin-top: 20px;
-        }
 
 
     </style>
@@ -83,6 +80,9 @@
             </tbody>
         </table>
 
+        <div class="d-grid mb-2 mt-4">
+            <a href="<c:url value='/member/asset'/>" class="btn btn-primary btn-logout">내 자산 관리</a>
+        </div>
         <div class="d-grid mb-2">
             <a href="<c:url value='/member/update'/>" class="btn btn-success btn-logout">정보수정</a>
         </div>
