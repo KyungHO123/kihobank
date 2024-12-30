@@ -20,4 +20,11 @@ public class LoanSubscriptionVO{
 	private int lsReNum; //상환방식번호
 	private int lsLtNum; //대출상태번호 (승인여부)
 	private int lsMdNum; //만기일자번호
+	
+	
+	private MemberVO member;
+	private LoanVO loan;
+	private RepayMentVO repayMent;
+	private MaturityDateVO maturity;
+	private LoanTypeVO loanType;
 }

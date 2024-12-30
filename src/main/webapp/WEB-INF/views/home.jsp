@@ -117,7 +117,7 @@ body {
 						<div class="card-body">
 							<h5 class="card-title">예금 상품</h5>
 							<p class="card-text">안정적인 수익을 보장하는 다양한 예금 상품을 준비했습니다.</p>
-							<a href="#" class="btn btn-primary">상품 조회</a>
+							<a href="<c:url value='/deposit/list'/>" class="btn btn-primary">상품 조회</a>
 						</div>
 					</div>
 				</div>

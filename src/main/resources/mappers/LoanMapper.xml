@@ -4,18 +4,82 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.jkh.khbank.dao.LoanDAO">
 
-<resultMap id="depositMap" type="DepositVO">
-    <id property="dpNum" column="dpNum" />
-    <result property="dpName" column="dpName" />
-    <result property="dpDetail" column="dpDetail" />
-    <result property="dpInterest" column="dpInterest" />
-    <result property="dpDtNum" column="dpDtNum" />
-    <result property="dpCreate" column="dpCreate" />
-    <association property="depositType" javaType="DepositTypeVO">
-        <id property="dtNum" column="dpDtNum" />
-        <result property="dtName" column="dtName" />
+<resultMap id="loanSubMap" type="LoanSubscriptionVO">
+    <id property="lsNum" column="lsNum" />
+    <result property="lsApp" column="lsApp" />
+    <result property="lsOk" column="lsOk" />
+    <result property="lsAccount" column="lsAccount" />
+    <result property="lsAmount" column="lsAmount" />
+    <result property="lsMeID" column="lsMeID" />
+    <result property="lsLaNum" column="lsLaNum" />
+    <result property="lsReNum" column="lsReNum" />
+    <result property="lsLtNum" column="lsLtNum" />
+    <result property="lsMdNum" column="lsMdNum" />
+    
+      <association property="loan" javaType="LoanVO" select="selectLoan" column="lsLaNum">
+        <id property="laNum" column="laNum" />
+        <result property="laName" column="laName" />
+        <result property="laDetail" column="laDetail" />
+        <result property="laInterests" column="laInterests" />
+        <result property="laLimitMax" column="laLimitMax" />
+        <result property="laLimitMin" column="laLimitMin" />
+        <result property="laOverdues" column="laOverdues" />
+        <result property="laCreate" column="laCreate" />
     </association>
+
+    <!-- LoanTypeVO 매핑 -->
+    <association property="loanType" javaType="LoanTypeVO" select="selectLoanType" column="lsLtNum">
+        <id property="ltNum" column="ltNum" />
+        <result property="ltName" column="ltName" />
+    </association>
+
+    <!-- MemberVO 매핑 -->
+    <association property="member" javaType="MemberVO" select="selectMember" column="lsMeID">
+        <id property="meID" column="meID" />
+        <result property="meName" column="meName" />
+        <result property="mePw" column="mePw" />
+        <result property="meEmail" column="meEmail" />
+        <result property="mePhone" column="mePhone" />
+        <result property="mePost" column="mePost" />
+        <result property="meStreet" column="meStreet" />
+        <result property="meDetail" column="meDetail" />
+        <result property="meSignup" column="meSignup" />
+        <result property="meUpdate" column="meUpdate" />
+        <result property="meMaNum" column="meMaNum" />
+        <result property="meMsNum" column="meMsNum" />
+    </association>
+
+    <!-- RepayMentVO 매핑 -->
+    <association property="repayMent" javaType="RepayMentVO" select="selectRepayMent" column="lsReNum">
+        <id property="reNum" column="reNum" />
+        <result property="reName" column="reName" />
+    </association>
+
+    <!-- MaturityDateVO 매핑 -->
+    <association property="maturity" javaType="MaturityDateVO" select="selectMaturityDate" column="lsMdNum">
+        <id property="mdNum" column="mdNum" />
+        <result property="mdDate" column="mdDate" />
+    </association>
+    
 </resultMap>
+<select id="selectLoanType" resultType="LoanTypeVO">
+	select * from loanType where ltNum = #{lsLtNum}
+</select>
+<select id="selectMember" resultType="MemberVO">
+	select * from member where meID = #{lsMeID}
+</select>
+<select id="selectMaturityDate" resultType="MaturityDateVO">
+	select * from maturityDate where mdNum = #{lsMdNum}
+</select>
+<select id="selectLoan" resultType="LoanVO">
+	select * from loan where laNum = #{lsLaNum}
+</select>
+<select id="selectRepayMent" resultType="RepayMentVO">
+	select * from repayMent where reNum = #{lsReNum}
+</select>
+
+
+
 <select id="getloanList" resultType="LoanVO">
 	select * from loan
 </select>
@@ -28,9 +92,11 @@
 <select id="getRepayMentList" resultType="repayMentVO">
 	select * from repayMent
 </select>
-<select id="getMemberLoanSub" resultType="LoanSubscriptionVO">
+
+<select id="getMemberLoanSub" resultMap="loanSubMap">
 	select * from loanSubscription where lsMeId = #{id}
 </select>
+
 <insert id="applyLoanSub">
 	insert into loanSubscription(lsApp,lsAccount,lsAmount,lsMeID,lsLaNum,lsReNum,lsLtNum,lsMdNum)
 	values(NOW(),#{ls.lsAccount},#{ls.lsAmount},#{ls.lsMeID},#{ls.lsLaNum},#{ls.lsReNum},2,#{ls.lsMdNum})

@@ -28,11 +28,11 @@
     <form action="<c:url value='/member/login'/>" method="post" >
         <div class="mb-3">
             <label for="username" class="form-label">아이디</label>
-            <input type="text" name="id" class="form-control" id="id" placeholder="아이디를 입력하세요">
+            <input type="text" name="id" value="rudgh12" class="form-control" id="id" placeholder="아이디를 입력하세요">
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">비밀번호</label>
-            <input type="password" name="pw" class="form-control" id="pw" placeholder="비밀번호를 입력하세요">
+            <input type="password" value="rudgh12" name="pw" class="form-control" id="pw" placeholder="비밀번호를 입력하세요">
         </div>
         <div class="d-grid">
             <button type="submit" class="btn btn-primary">로그인</button>

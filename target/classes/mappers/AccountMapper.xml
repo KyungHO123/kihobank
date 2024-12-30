@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.jkh.khbank.dao.AccountDAO">
-    <resultMap id="AccountVO" type="AccountVO">
+    <resultMap id="accountMap" type="AccountVO">
         <id property="acHeadNum" column="acHeadNum" />
         <result property="acNum" column="acNum" />
         <result property="acName" column="acName" />
@@ -21,7 +21,7 @@
 <select id="getMember" resultType="MemberVO">
 		select * from member where meID = #{acMeID}
 	</select>
-	<select id="getMemberAccount" resultMap="AccountVO">
+	<select id="getMemberAccount" resultMap="accountMap">
 		select * from account where acMeId = #{id}
 	</select>
 	

@@ -178,11 +178,9 @@ public class HomeController {
 			int balance = (int)ac.getAcBalance();
 			ac.setAcBalance(balance);
 			model.addAttribute("account",ac);
-			
+			model.addAttribute("laSub",laSub);
 			return "/member/asset";
 		}
-		
-		
 		
 		model.addAttribute("laSub",laSub);
 		model.addAttribute("account",ac);

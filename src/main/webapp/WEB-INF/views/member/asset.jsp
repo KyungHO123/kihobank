@@ -73,11 +73,13 @@
             <div class="card-body">
             	<c:choose >
             		<c:when test="${laSub != null }">
-		                <h5 class="card-title">${laSub.lsName}</h5>
+		                <h5 class="card-title">${laSub.loan.laName}</h5>
 		                <p class="card-text">
-		                    <strong>대출 금액:</strong> ${laSub.lsBalance}<br>
-		                    <strong>이자율:</strong> ${laSub.lsAmount}<br>
-		                    <strong>상환 기간:</strong> 10년
+		                    <strong>대출금액:</strong> ${laSub.lsAmount}원<br>
+		                    <strong>이자율:</strong>${laSub.loan.laInterest * 100}%<br>
+		                    <strong>상환방식:</strong>${laSub.repayMent.reName}<br>
+		                    <strong>상환기간:</strong>${laSub.maturity.mdDate}년 <br>
+		                    <strong>승인여부:</strong>${laSub.loanType.ltName}
 		                </p>
 	                </c:when> 
 	                 <c:otherwise>
