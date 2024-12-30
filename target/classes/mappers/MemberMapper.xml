@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.jkh.khbank.dao.MemberDAO">
+
+	<select id="selectMember" resultType="MemberVO">
+		select * from member where
+		meID = #{meId}
+	</select>
+	<insert id="insertMember">
+		insert into
+		member(meID,meName,mePw,mePhone,meEmail,mePost,meStreet,meDetail,meSignup,meMaNum,meMsNum)
+		values(#{me.meID},#{me.meName},#{me.mePw},#{me.mePhone},#{me.meEmail},#{me.mePost},#{me.meStreet},#{me.meDetail},NOW(),1,1)
+	</insert>
+	<insert id="insertLog" parameterType="logVO"
+		useGeneratedKeys="true" keyProperty="logNum">
+		INSERT INTO log (logDate, logIP,
+		logMeID)
+		VALUES (NOW(), #{log.logIP}, #{log.logMeID})
+	</insert>
+	<select id="selectLog" resultType="logVO">
+		select * from log where
+		logMeID = #{id}
+		ORDER BY logDate DESC
+		LIMIT 1
+	</select>
+	<update id="updateLog">
+		update log set logOutDate = NOW()
+		where
+		logNum = #{i}
+	</update>
+
+	<update id="updateMemberInfo">
+		UPDATE member
+		SET
+		meName = #{m.meName},
+		mePw =
+		#{m.mePw},
+		meEmail = #{m.meEmail},
+		mePhone = #{m.mePhone},
+		mePost =
+		#{m.mePost},
+		meStreet = #{m.meStreet},
+		meDetail = #{m.meDetail},
+		meUpdate = NOW()
+		WHERE meID = #{m.meID}
+	</update>
+
+	<select id="getMemberInfo" resultType="MemberVO">
+		select * from member where
+		meID = #{id}
+	</select>
+
+	<delete id="deleteMember">
+		DELETE FROM member
+		WHERE meID = #{id}
+	</delete>
+</mapper>

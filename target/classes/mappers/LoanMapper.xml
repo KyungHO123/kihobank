@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.jkh.khbank.dao.LoanDAO">
+
+<resultMap id="depositMap" type="DepositVO">
+    <id property="dpNum" column="dpNum" />
+    <result property="dpName" column="dpName" />
+    <result property="dpDetail" column="dpDetail" />
+    <result property="dpInterest" column="dpInterest" />
+    <result property="dpDtNum" column="dpDtNum" />
+    <result property="dpCreate" column="dpCreate" />
+    <association property="depositType" javaType="DepositTypeVO">
+        <id property="dtNum" column="dpDtNum" />
+        <result property="dtName" column="dtName" />
+    </association>
+</resultMap>
+<select id="getloanList" resultType="LoanVO">
+	select * from loan
+</select>
+<select id="getLoan" resultType="LoanVO">
+	select * from loan where laNum = #{num}
+</select>
+<select id="getDateList" resultType="maturityDateVO">
+	select * from maturityDate
+</select>
+<select id="getRepayMentList" resultType="repayMentVO">
+	select * from repayMent
+</select>
+<select id="getMemberLoanSub" resultType="LoanSubscriptionVO">
+	select * from loanSubscription where lsMeId = #{id}
+</select>
+<insert id="applyLoanSub">
+	insert into loanSubscription(lsApp,lsAccount,lsAmount,lsMeID,lsLaNum,lsReNum,lsLtNum,lsMdNum)
+	values(NOW(),#{ls.lsAccount},#{ls.lsAmount},#{ls.lsMeID},#{ls.lsLaNum},#{ls.lsReNum},2,#{ls.lsMdNum})
+</insert>
+	
+</mapper>

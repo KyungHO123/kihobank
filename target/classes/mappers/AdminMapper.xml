@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.jkh.khbank.dao.AdminDAO">
+
+
+
+<resultMap id="memberMap" type="MemberVO">
+    <id property="meID" column="meID" />
+    <result property="meName" column="meName" />
+    <result property="mePw" column="mePw" />
+    <result property="meEmail" column="meEmail" />
+    <result property="mePhone" column="mePhone" />
+    <result property="mePost" column="mePost" />
+    <result property="meStreet" column="meStreet" />
+    <result property="meDetail" column="meDetail" />
+    <result property="meSignup" column="meSignup" />
+    <result property="meUpdate" column="meUpdate" />
+    <result property="meMaNum" column="meMaNum" />
+    <result property="meMsNum" column="meMsNum" />
+    <collection property="meState" ofType="MemberStateVO" 
+        column="meMsNum" select="getMeState"/>
+    <collection property="meAuthority" ofType="MemberAuthorityVO" 
+        column="meMaNum" select="getMeAuthority"/>
+    <collection property="account" ofType="AccountVO" 
+        column="meID" select="getMeAccount"/>
+</resultMap>
+
+<resultMap id="depositMap" type="DepositVO">
+    <id property="dpNum" column="dpNum" />
+    <result property="dpName" column="dpName" />
+    <result property="dpDetail" column="dpDetail" />
+    <result property="dpInterest" column="dpInterest" />
+    <result property="dpDtNum" column="dpDtNum" />
+    <result property="dpCreate" column="dpCreate" />
+    <association property="depositType" javaType="DepositTypeVO">
+        <id property="dtNum" column="dpDtNum" />
+        <result property="dtName" column="dtName" />
+    </association>
+</resultMap>
+	<select id="getDepositType" resultType="DepositTypeVO">
+		select * from depositType where dtNum = #{num}
+	</select> 
+	<select id="selectAjaxDpType" resultType="DepositTypeVO">
+		select * from depositType
+	</select>
+
+	<select id="getMemberList" resultMap="memberMap">
+		select * from member
+	</select>
+	<select id="getMeAccount" resultType="AccountVO">
+		select * from account where acMeID = #{meID}
+	</select>
+	<select id="getMeAuthority" resultType="MemberAuthorityVO">
+		select * from memberAuthority where maNum = #{meMaNum}
+	</select>
+	<select id="getMeState"	 resultType="MemberStateVO">
+		select * from memberState where msNum = #{meMsNum}
+	</select>
+	<insert id="addDeposit">
+		insert into deposit(dpName,dpDetail,dpInterest,dpDtNum,dpCreate)
+		values(#{dp.dpName},#{dp.dpDetail},#{dp.dpInterest},#{dp.dpDtNum},NOW())
+	</insert>
+
+	<insert id="addLoan">
+		insert into
+		Loan(laName,laDetail,laInterest,laLimitMin,laLimitMax,laOverdue,laCreate)
+		values(#{la.laName},#{la.laDetail},#{la.laInterest},#{la.laLimitMin},#{la.laLimitMax},#{la.laOverdue},NOW())
+	</insert>
+	<select id="selectAjaxLoanList" resultType="LoanVO">
+		select * from loan
+		order by laNum desc
+		limit
+		#{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	<select id="getAjaxMemberList" resultMap="memberMap">
+		select * from member
+		order by meSignup desc
+		limit
+		#{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	<select id="selectTotalCount" resultType="int">
+		select count(*) from
+		loan
+	</select>
+	<select id="getTotalMemberCount" resultType="int">
+		select count(*) from
+		member
+	</select>
+	<select id="getLoanNum" resultType="LoanVO">
+		select * from loan where
+		laNum = #{num}
+	</select>
+	<update id="loanUpdate">
+		UPDATE loan
+		SET
+		laName = #{la.laName},
+		laInterest =
+		#{la.laInterest},
+		laLimitMax = #{la.laLimitMax},
+		laLimitMin =
+		#{la.laLimitMin},
+		laOverdue = #{la.laOverdue},
+		laDetail = #{la.laDetail}
+		WHERE
+		laNum = #{la.laNum}
+	</update>
+	<update id="depositUpdate">
+		UPDATE deposit
+		SET
+		dpName = #{dp.dpName},
+		dpInterest = #{dp.dpInterest},
+		dpDtNum = #{dp.dpDtNum},
+		dpDetail = #{dp.dpDetail}
+		WHERE
+		dpNum = #{dp.dpNum}
+	</update>
+	<update id="adminMemberUpdate">
+		UPDATE member
+		SET
+		meMsNum = #{me.meMsNum},
+		meMaNum = #{me.meMaNum}
+		WHERE
+		meID = #{me.meID}
+	</update>
+	<delete id="deleteLoan">
+		DELETE FROM loan
+		WHERE laNum = #{num}
+	</delete>
+	<delete id="depositDelete">
+		DELETE FROM deposit
+		WHERE dpNum = #{num}
+	</delete>
+	<select id="getDepositTypeList" resultType="DepositTypeVO">
+		select * from depositType
+	</select>
+	<select id="getMemberState" resultType="MemberStateVO">
+		select * from memberState
+	</select>
+	<select id="getMemberauthority" resultType="MemberAuthorityVO">
+		select * from memberAuthority
+	</select>
+	
+	<select id="getDepositList" resultMap="depositMap">
+		select * from deposit
+		order by dpNum desc
+		limit
+		#{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	<select id="getDpTotalCount" resultType="int">
+		select count(*) from
+		deposit
+	</select>
+	
+	<select id="getDepositNum" resultMap="depositMap">
+		select * from deposit where dpNum = #{num}
+	</select>
+	
+</mapper>
