@@ -61,29 +61,25 @@ body {
 					                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					            </div>
 					            <div class="modal-body">
-					                    <input type="hidden" name="laNum" id="laNum1">
+					                    <input type="hidden" name="dpNum" id="laNum1">
 					                    <div class="mb-3">
 					                        <label for="laName" class="form-label">상품명</label>
-					                        <input type="text"  class="form-control" id="laName1" name="laName" readonly="readonly">
+					                        <input type="text"  class="form-control" id="laName1" name="dpName" readonly="readonly">
 					                    </div>
 					                    <div class="mb-3">
 					                        <label for="laDetail1" class="form-label">상품설명</label>
-					                        <textarea  class="form-control" id="laDetail1" name="laDetail" readonly="readonly"></textarea>
+					                        <textarea  class="form-control" id="laDetail1" name="dpDetail" readonly="readonly"></textarea>
+					                    </div>
+					                     <div class="mb-3">
+					                        <label for="dpName" class="form-label">상품종류</label>
+					                        <input type="text" class="form-control" id="dtName" name="dtName"  readonly="readonly">
 					                    </div>
 					                    <div class="mb-3">
 					                        <label for="laInterest" class="form-label">이자율 (%)</label>
-					                        <input type="number" class="form-control" id="laInterest1" name="laInterest" step="0.01" readonly="readonly">
+					                        <input type="number" class="form-control" id="laInterest1" name="dpInterest" step="0.01" readonly="readonly">
 					                    </div>
-					                    <div class="mb-3">
-					                        <label for="laLimitMax" class="form-label">저축한도</label>
-					                        <input type="number" class="form-control" id="laLimitMin1" name="laLimitMin" readonly="readonly">
-					                        <input type="number" class="form-control" id="laLimitMax1" name="laLimitMax" readonly="readonly">
-					                    </div>
-					                     <div class="mb-3">
-					                        <label for="laOverdue" class="form-label">연체이자율 (%)</label>
-					                        <input type="number" class="form-control" id="laOverdue1" name="laOverdue" step="0.01" readonly="readonly">
-					                    </div>
-					                    <button type="button" id="app" class="btn btn-primary w-100">저축 신청</button>
+					                   
+					                    <button type="button" id="app" class="btn btn-primary w-100">상품 가입</button>
 					            </div>
 					        </div>
 					    </div>
@@ -184,23 +180,22 @@ getDepositList(cri);
 		   });  
 
 $(document).on("click",".detail-btn",function(){
-	let laNum = $(this).data("num");
+	let dpNum = $(this).data("num");
 	
 	$.ajax({
-        url: '<c:url value="/Deposit/getDepositNum"/>', // 저축 상품 데이터를 가져올 API
+        url: '<c:url value="/deposit/getDepositNum"/>', // 저축 상품 데이터를 가져올 API
         type: 'GET',
-        data: { laNum: laNum },
+        data: { dpNum: dpNum },
         success: function (data) {
+        	console.log(data);
+        	console.log(data.depositType.dtName);
         	
-            $('#laNum1').val(data.laNum); // 저축 상품 번호
-            $('#laName1').val(data.laName); // 상품명
-            $('#laDetail1').val(data.laDetail); // 상품명
-            $('#laInterest1').val(data.laInterest); // 이자율
-            $('#laLimitMax1').val(data.laLimitMax); // 저축 한도
-            $('#laLimitMin1').val(data.laLimitMin); // 저축 한도
-            $('#laOverdue1').val(data.laOverdue); // 저축 한도
+            $('#laNum1').val(data.dpNum); // 저축 상품 번호
+            $('#laName1').val(data.dpName); // 상품명
+            $('#laDetail1').val(data.dpDetail); // 상품설명
+            $('#laInterest1').val(data.dpInterest); // 이자율
+            $('#dtName').val(data.depositType.dtName); // 상품종류
 
-            // 모달 창 열기
          
             modal.show();
         },
@@ -213,7 +208,7 @@ $(document).on("click",".detail-btn",function(){
 
 $(document).on("click", "#app", function () {
     // 모달 내 입력 필드 값 가져오기
-    let laNum = $('#laNum1').val();
+    let dpNum = $('#laNum1').val();
 
     // URL 생성 및 페이지 이동
     window.location.href = '<c:url value="/deposit/app?dpNum="/>' + encodeURIComponent(dpNum);

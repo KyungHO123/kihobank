@@ -14,11 +14,14 @@ public class DepositSubscriptionVO {
 	private int dsAmount; //저축이체금액
 	private Date dsSubDate; //가입일자 
 	private Date dsCloseDate; //해지일자
+	private Date dsMaturity; //만기일자
 	private int dsDpNum;// 상품번호
 	private String dsMeID;// 아이디
 	private int dsSsNum;// 가입상태번호
 	private int dsMdNum;// 만기일자번호
 	
+	private DepositVO deposit;
 	private AccountVO account;
 	private MemberVO member;
+	private MaturityDateVO maturity;
 }

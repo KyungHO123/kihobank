@@ -1,6 +1,9 @@
 package kr.jkh.khbank.controller;
 
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,10 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import kr.jkh.khbank.model.dto.LoginDTO;
 import kr.jkh.khbank.model.vo.AccountVO;
+import kr.jkh.khbank.model.vo.DepositSubscriptionVO;
 import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
+import kr.jkh.khbank.model.vo.MaturityDateVO;
 import kr.jkh.khbank.model.vo.MemberVO;
 import kr.jkh.khbank.model.vo.logVO;
 import kr.jkh.khbank.service.AccountService;
+import kr.jkh.khbank.service.DepositService;
 import kr.jkh.khbank.service.LoanService;
 import kr.jkh.khbank.service.MemberService;
 
@@ -31,6 +37,8 @@ public class HomeController {
 	private AccountService accountService;
 	@Autowired
 	private LoanService loanService;
+	@Autowired
+	private DepositService depositService;
 	
 	@GetMapping("/")
 	public String home(Locale locale, Model model,HttpSession session) {
@@ -174,16 +182,33 @@ public class HomeController {
 		MemberVO member = (MemberVO)session.getAttribute("member");
 		AccountVO ac = accountService.getMembetAccount(member.getMeID());
 		LoanSubscriptionVO laSub = loanService.getMemberLoanSub(member.getMeID());
+		DepositSubscriptionVO deSub = depositService.getMemberDepositSub(member.getMeID());
+		MaturityDateVO md = depositService.getMaturity(deSub.getDsMdNum());
+		
+		int year = md.getMdDate(); // 연도 추가 값
+		Date subDate = deSub.getDsSubDate(); 
+
+		LocalDate localSubDate = subDate.toLocalDate();
+		// 연도를 추가
+		LocalDate localMaturityDate = localSubDate.plusYears(year);
+
+		// LocalDate -> java.sql.Date 변환
+		Date maturityDate = Date.valueOf(localMaturityDate);
+		if(deSub.getDsMaturity() == null) {
+			depositService.UpdateDepositMaturity(deSub.getDsNum(),maturityDate);
+		}
 		if(ac != null) { 
 			int balance = (int)ac.getAcBalance();
 			ac.setAcBalance(balance);
 			model.addAttribute("account",ac);
 			model.addAttribute("laSub",laSub);
+			model.addAttribute("deSub",deSub);
 			return "/member/asset";
 		}
 		
 		model.addAttribute("laSub",laSub);
 		model.addAttribute("account",ac);
+		model.addAttribute("maturityDate",maturityDate);
 		
 		return "/member/asset";
 	}

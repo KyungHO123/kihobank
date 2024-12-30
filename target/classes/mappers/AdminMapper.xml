@@ -34,14 +34,16 @@
     <result property="dpInterest" column="dpInterest" />
     <result property="dpDtNum" column="dpDtNum" />
     <result property="dpCreate" column="dpCreate" />
-    <association property="depositType" javaType="DepositTypeVO">
+    <association property="depositType" javaType="DepositTypeVO" select="getDepositType" column="dpDtNum">
         <id property="dtNum" column="dpDtNum" />
         <result property="dtName" column="dtName" />
     </association>
 </resultMap>
+
 	<select id="getDepositType" resultType="DepositTypeVO">
 		select * from depositType where dtNum = #{num}
 	</select> 
+	
 	<select id="selectAjaxDpType" resultType="DepositTypeVO">
 		select * from depositType
 	</select>

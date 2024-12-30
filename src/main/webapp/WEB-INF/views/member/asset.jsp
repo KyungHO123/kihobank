@@ -75,11 +75,13 @@
             		<c:when test="${laSub != null }">
 		                <h5 class="card-title">${laSub.loan.laName}</h5>
 		                <p class="card-text">
+		                    <strong  class="lsAccount">임시계좌:</strong><br>
 		                    <strong>대출금액:</strong> ${laSub.lsAmount}원<br>
 		                    <strong>이자율:</strong>${laSub.loan.laInterest * 100}%<br>
 		                    <strong>상환방식:</strong>${laSub.repayMent.reName}<br>
 		                    <strong>상환기간:</strong>${laSub.maturity.mdDate}년 <br>
-		                    <strong>승인여부:</strong>${laSub.loanType.ltName}
+		                    <strong>승인여부:</strong>${laSub.loanType.ltName} <br>
+	                     	<a href="#" class="btn btn-outline-primary mt-3 w-50">상세보기</a>
 		                </p>
 	                </c:when> 
 	                 <c:otherwise>
@@ -95,22 +97,17 @@
         <h2 class="section-title">예·적금 목록</h2>
         <div class="card text-center mb-5 shadow-sm" style="max-width: 600px; margin: 0 auto; border-radius: 15px; background: #f8f9fa;">
             <div class="card-body">
-                <h5 class="card-title">고금리 정기예금</h5>
-                <p class="card-text">
-                    <strong>금액:</strong> 10,000,000원<br>
-                    <strong>이자율:</strong> 4.0%<br>
-                    <strong>만기일:</strong> 2025-12-31
-                </p>
-            </div>
-        </div>
-        <div class="card text-center mb-5 shadow-sm" style="max-width: 600px; margin: 0 auto; border-radius: 15px; background: #f8f9fa;">
-            <div class="card-body">
-                <h5 class="card-title">여행 적금</h5>
-                <p class="card-text">
-                    <strong>월 납입액:</strong> 200,000원<br>
-                    <strong>이자율:</strong> 3.5%<br>
-                    <strong>만기일:</strong> 2025-06-30
-                </p>
+            	<c:choose >
+            		<c:when test="${deSub != null}">
+		                <h5 class="card-title">${deSub.deposit.dpName}</h5>
+		                <p class="card-text">
+		                    <strong class="deSub"></strong> <br>
+		                    <strong>이자율:</strong>${deSub.deposit.dpInterest * 100}%<br>
+		                    <strong>만기일:</strong> ${deSub.dsMaturity}<br>
+		                    <a href="#" class="btn btn-outline-primary mt-3 w-50">상세보기</a>
+		                </p>
+            		</c:when>
+            	</c:choose>
             </div>
         </div>
     </section>
@@ -126,6 +123,8 @@ function format1(num) {
 }
 if(${account.acNum != null}){
 	$('#num').text(format1(${account.acNum}));
+	$('.lsAccount').text(format1("임시계좌"+${laSub.lsAccount}));
+	$('.deSub').text(format1("저축계좌"+${deSub.dsAccount}));
 }
 function format(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
