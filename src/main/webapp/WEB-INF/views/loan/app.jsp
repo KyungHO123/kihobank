@@ -76,7 +76,7 @@
             	<select name="lsMdNum" class="form-select">
             		<option selected disabled>상환개월을 선택해주세요</option>
             		<c:forEach items="${date}" var="md">
-            			<option value="${md.mdNum}">${md.mdDate}개월</option>
+            			<option value="${md.mdNum}">${md.mdDate}년</option>
             		</c:forEach>
             	</select>
             </div>

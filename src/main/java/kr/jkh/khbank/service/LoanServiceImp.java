@@ -1,5 +1,6 @@
 package kr.jkh.khbank.service;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,12 @@ public class LoanServiceImp implements LoanService {
 	@Override
 	public LoanSubscriptionVO getMemberLoanSub(String meID) {
 		return laDao.getMemberLoanSub(meID);
+	}
+	@Override
+	public void UpdateLoanMaturity(int lsNum, Date maturityDate) {
+		laDao.UpdateLoanMaturity(lsNum,maturityDate);
+		return;
+		
 	}
 
 

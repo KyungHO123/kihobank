@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.jkh.khbank.dao.DepositDAO">
+
+<resultMap id="depositMap" type="DepositVO">
+    <id property="dpNum" column="dpNum" />
+    <result property="dpName" column="dpName" />
+    <result property="dpDetail" column="dpDetail" />
+    <result property="dpInterest" column="dpInterest" />
+    <result property="dpDtNum" column="dpDtNum" />
+    <result property="dpCreate" column="dpCreate" />
+    <association property="depositType" javaType="DepositTypeVO" select="getDepositType" column="dpDtNum">
+        <id property="dtNum" column="dpDtNum" />
+        <result property="dtName" column="dtName" />
+    </association>
+</resultMap>
+<resultMap id="depositSubMap" type="DepositSubscriptionVO">
+    <id property="dsNum" column="dsNum" />
+    <result property="dsAccount" column="dsAccount" />
+    <result property="dsAmount" column="dsAmount" />
+    <result property="dsSubDate" column="dsSubDate" />
+    <result property="dsCloseDate" column="dsCloseDate" />
+    <result property="dsDpNum" column="dsDpNum" />
+    <result property="dsMeID" column="dsMeID" />
+    <result property="dsSsNum" column="dsSsNum" />
+    <result property="dsMdNum" column="dsMdNum" />
+    <association property="deposit" javaType="DepositVO" select="getDepositMyBatis" column="dsDpNum">
+        <id property="dpNum" column="dpNum" />
+        <result property="dtName" column="dtName" />
+    </association>
+    <association property="member" javaType="MemberVO" select="getMemberMyBatis" column="dsMeID">
+        <id property="meID" column="meID" />
+        <result property="meName" column="meName" />
+        <result property="mePw" column="mePw" />
+        <result property="meEmail" column="meEmail" />
+        <result property="mePhone" column="mePhone" />
+        <result property="mePost" column="mePost" />
+        <result property="meStreet" column="meStreet" />
+        <result property="meDetail" column="meDetail" />
+        <result property="meSignup" column="meSignup" />
+        <result property="meUpdate" column="meUpdate" />
+        <result property="meMaNum" column="meMaNum" />
+        <result property="meMsNum" column="meMsNum" />
+    </association>
+    <association property="maturity" javaType="MaturityDateVO" select="getMaturityMyBatis" column="dsMdNum">
+        <id property="mdNum" column="mdNum" />
+        <result property="mdDate" column="mdDate" />
+    </association>
+</resultMap>
+<select id="getMaturityMyBatis" resultType="MaturityDateVO">
+	select * from MaturityDate where mdNum = #{dsMdNum}
+</select>
+<select id="getDepositMyBatis" resultMap="depositMap">
+	select * from deposit where dpNum = #{dsDpNum}
+</select>
+<select id="getMemberMyBatis" resultType="MemberVO">
+	select * from member where meID = #{dsMeID}
+</select>
+
+<select id="getDepositType" resultType="DepositTypeVO">
+	select * from depositType where dtNum = #{num}
+</select> 
+	
+
+ <select id="getLoan" resultMap="depositMap">
+ 	select * from deposit where dpNum = #{num}
+ </select>
+	
+<insert id="applydpSub">
+	insert into depositSubscription(dsAccount,dsAmount,dsSubDate,dsDpNum,dsMeID,dsSsNum,dsMdNum)
+	values(#{dp.dsAccount},#{dp.dsAmount},NOW(),#{dp.dsDpNum},#{dp.dsMeID},1,#{dp.dsMdNum})
+</insert>	
+
+<select id="getMemberDepositSub" resultMap="depositSubMap">
+	select * from depositSubscription where dsMeID = #{id}
+</select>
+
+<select id="getMaDate" resultType="MaturityDateVO">
+	select * from maturityDate where mdNum = #{num}
+</select>
+<update id="UpdateDepositMaturity">
+	update depositSubscription set dsMaturity = #{date} where dsNum = #{num}
+</update>
+</mapper>

@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
+import kr.jkh.khbank.model.vo.DepositSubscriptionVO;
+import kr.jkh.khbank.model.vo.DepositTypeVO;
+import kr.jkh.khbank.model.vo.DepositVO;
 import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MaturityDateVO;
 import kr.jkh.khbank.model.vo.MemberVO;
@@ -25,77 +27,80 @@ import kr.jkh.khbank.model.vo.RepayMentVO;
 import kr.jkh.khbank.pagination.Criteria;
 import kr.jkh.khbank.pagination.PageMaker;
 import kr.jkh.khbank.service.AdminService;
+import kr.jkh.khbank.service.DepositService;
 import kr.jkh.khbank.service.LoanService;
 
 @Controller
-public class LoanController {
+public class DepositController {
 	@Autowired
-	private LoanService loanService;
+	private DepositService depositService;
 	@Autowired
 	private AdminService adminService;
+	@Autowired
+	private LoanService loanService;
 
-	@GetMapping("/loan/list")
+	@GetMapping("/deposit/list")
 	public String agree(Locale locale, Model model, HttpSession session) {
-		model.addAttribute("title", "기호은행 - 대출 리스트");
-		/*
-		 * List<LoanVO> loan = loanService.getloanList();
-		 * model.addAttribute("loan",loan);
-		 */
+		model.addAttribute("title", "기호은행 - 저축상품 리스트");
+		
 
-		return "/loan/list";
+		return "/deposit/list";
 	}
-	
 	@ResponseBody
-	@PostMapping("/loan/ajaxList")
-	public Map<String, Object> loanList(@RequestBody Criteria cri) {
+	@PostMapping("/deposit/ajaxList")
+	public Map<String, Object> ajaxList(@RequestBody Criteria cri) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		cri.setPerPageNum(10);
-		ArrayList<LoanVO> loanList = adminService.getLoanList(cri);
-		int totalCount = adminService.getTotalCount(cri);
+		ArrayList<DepositVO> depositList = adminService.getDepositList(cri);
+		for(DepositVO dt : depositList) {
+			DepositTypeVO dp = adminService.getDepositType(dt.getDpDtNum());
+			dt.setDepositType(dp);
+		}
+		
+		int totalCount = adminService.getDpTotalCount(cri);
 		PageMaker pm = new PageMaker(10, cri, totalCount);
-		map.put("loanList", loanList);
+		map.put("depositList", depositList);
 		map.put("pm", pm);
 		return map;
 	}
 	
 	@ResponseBody
-	@GetMapping("/loan/getLoanNum")
-	public LoanVO getLoanNum(@RequestParam("laNum")  int laNum) {
-		return adminService.getLoanNum(laNum);
+	@GetMapping("/deposit/getDepositNum")
+	public DepositVO getLoanNum(@RequestParam("dpNum") int dpNum) {
+		return adminService.getDepositNum(dpNum);
 	}
 	
-	@GetMapping("/loan/app")
+	@GetMapping("/deposit/app")
 	public String app(Locale locale, Model model,
-			HttpSession session,@RequestParam("laNum") int laNum) {
-		model.addAttribute("title", "기호은행 - 대출 신청");
+			HttpSession session,@RequestParam("dpNum") int dpNum) {
+		model.addAttribute("title", "기호은행 - 저축 가입");
 		MemberVO member = (MemberVO)session.getAttribute("member");
 		if(member == null) {
 			model.addAttribute("msg","로그인이 필요한 페이지입니다.");
 			model.addAttribute("url","/member/login");
 			return "message";
 		}
-		LoanVO loan = loanService.getLoan(laNum);
 		List<MaturityDateVO> date = loanService.getDateList();
-		List<RepayMentVO> repayMent = loanService.getRepayMentList();
+		DepositVO deposit = depositService.getLoan(dpNum);
 		
 		
 		model.addAttribute("date",date);
-		model.addAttribute("repayMent",repayMent);
-		model.addAttribute("loan",loan);
-		return "/loan/app";
+		model.addAttribute("dp",deposit);
+		return "/deposit/app";
 	}
-	@PostMapping("/loan/apply")
-	public String apply(Model model,LoanSubscriptionVO loanSub) {
-		boolean res = loanService.applyLoanSub(loanSub);
+	
+	@PostMapping("/deposit/apply")
+	public String apply(Model model,DepositSubscriptionVO dpSub) {
+		boolean res = depositService.applydpSub(dpSub);
 		if(res) {
-			model.addAttribute("msg","대출 신청이 완료 되었습니다. 관리자 승인 후 입금 됩니다.");
-			model.addAttribute("url","/loan/list");
+			model.addAttribute("msg","상품 가입이 완료 되었습니다.");
+			model.addAttribute("url","/deposit/list");
 		}else {
-			model.addAttribute("msg","대출 신청에 실패 하였습니다.");
-			model.addAttribute("url","/loan/app");
+			model.addAttribute("msg","상품 가입에 실패 하였습니다.");
+			model.addAttribute("url","/deposit/app");
 		}
 		
 		return "message";
 	}
-	
+
 }

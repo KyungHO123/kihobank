@@ -34,14 +34,44 @@
     <result property="dpInterest" column="dpInterest" />
     <result property="dpDtNum" column="dpDtNum" />
     <result property="dpCreate" column="dpCreate" />
-    <association property="depositType" javaType="DepositTypeVO">
+    <association property="depositType" javaType="DepositTypeVO" select="getDepositType" column="dpDtNum">
         <id property="dtNum" column="dpDtNum" />
         <result property="dtName" column="dtName" />
     </association>
 </resultMap>
+<resultMap id="laSubMap" type="LoanSubscriptionVO">
+    <id property="lsNum" column="lsNum" />
+    <result property="lsApp" column="lsApp" />
+    <result property="lsOk" column="lsOk" />
+    <result property="lsAccount" column="lsAccount" />
+    <result property="lsMeID" column="lsMeID" />
+    <result property="lsLaNum" column="lsLaNum" />
+    <result property="lsReNum" column="lsReNum" />
+    <result property="lsLtNum" column="lsLtNum" />
+    <result property="lsMdNum" column="lsMdNum" />
+    <result property="lsAmount" column="lsAmount" />
+  <collection property="member" ofType="MemberVO" 
+		column="lsMeID" select="selectLsMember"/>
+  <collection property="loan" ofType="LoanVO" 
+		column="lsLaNum" select="selectLsLoan"/>
+  <collection property="repayMent" ofType="RepayMentVO" 
+		column="lsReNum" select="selectLsRepay"/>
+</resultMap>
+
+	<select id="selectLsRepay" resultType="RepayMentVO">
+		select * from repayMent where reNum = #{lsReNum}
+	</select>
+	<select id="selectLsLoan" resultType="LoanVO">
+		select * from loan where laNum = #{lsLaNum}
+	</select>
+	<select id="selectLsMember" resultType="MemberVO">
+		select * from member where meID = #{lsMeID}
+	</select>
+
 	<select id="getDepositType" resultType="DepositTypeVO">
 		select * from depositType where dtNum = #{num}
 	</select> 
+	
 	<select id="selectAjaxDpType" resultType="DepositTypeVO">
 		select * from depositType
 	</select>
@@ -106,6 +136,14 @@
 		WHERE
 		laNum = #{la.laNum}
 	</update>
+	<update id="isOk">
+		UPDATE loanSubscription
+		SET
+		lsLtNum = 1,
+		lsOk = NOW()
+		WHERE
+		lsNum = #{ls.lsNum}
+	</update>
 	<update id="depositUpdate">
 		UPDATE deposit
 		SET
@@ -156,5 +194,18 @@
 	<select id="getDepositNum" resultMap="depositMap">
 		select * from deposit where dpNum = #{num}
 	</select>
+	
+	<select id="selectLaSubList" resultMap="laSubMap">
+		select * from loanSubscription where lsLtNum = 2	
+			order by lsNum desc
+		limit
+		#{cri.pageStart}, #{cri.perPageNum}
+	
+	</select>
+	
+	<insert id="addLoanRepayment">
+		insert into loanRepayment(lrDate,lrAmount,lrBalance,lrLsNum,lrRtNum,lrOdNum)
+		values(DATE_ADD(CURDATE(), INTERVAL 30 DAY),0,#{ls.lsAmount},#{ls.lsNum},1,1)
+	</insert>
 	
 </mapper>

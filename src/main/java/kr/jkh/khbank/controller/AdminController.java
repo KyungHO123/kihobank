@@ -2,6 +2,7 @@ package kr.jkh.khbank.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.DepositVO;
+import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
 import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MemberAuthorityVO;
 import kr.jkh.khbank.model.vo.MemberStateVO;
@@ -259,4 +261,46 @@ public class AdminController {
 		return map;
 	}
 	
+	@GetMapping("/admin/loanList")
+	public String loanList(Model model,HttpSession session) {
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		if(member == null) {
+			model.addAttribute("msg","로그인이 필요한 페이지입니다.");
+			model.addAttribute("url","/member/login");
+			return "message";
+		}
+		if(member.getMeMaNum() != 2) {
+			model.addAttribute("msg","접근할 수 없는 페이지입니다.");
+			model.addAttribute("url","/");
+			return "message";
+		}
+		
+		return "/admin/loanList";
+	}
+	@ResponseBody
+	@PostMapping("/admin/ajaxLoanList")
+	public Map<String, Object> ajaxLoanList(@RequestBody Criteria cri) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		cri.setPerPageNum(10);
+		List<LoanSubscriptionVO> laSub = adminService.selectLaSubList(cri);
+		int totalCount = adminService.getDpTotalCount(cri);
+		PageMaker pm = new PageMaker(10, cri, totalCount);
+		map.put("laSub", laSub);
+		map.put("pm", pm);
+		
+		
+		return map;
+	}
+	@ResponseBody
+	@PostMapping("/admin/lsOk")
+	public Map<String, Object> lsOk(@RequestBody LoanSubscriptionVO laSub ,HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		MemberVO user = (MemberVO) session.getAttribute("member");
+		if(user.getMeMaNum() != 2 ||user == null) {
+			return null;
+		}
+		boolean res = adminService.lsOk(laSub);
+		map.put("res", res);
+		return map;
+	}
 }

@@ -81,7 +81,7 @@
                         <div class="card-body">
                             <h5 class="card-title">대출 관리</h5>
                             <p class="card-text">대출 현황을 확인하고 처리할 수 있습니다.</p>
-                            <a href="<c:url value='/admin/loanManagement' />" class="btn btn-primary">관리</a>
+                            <a href="<c:url value='/admin/loanList' />" class="btn btn-primary">관리</a>
                         </div>
                     </div>
                 </div>
