@@ -12,6 +12,7 @@ import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.DepositVO;
+import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
 import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MemberAuthorityVO;
 import kr.jkh.khbank.model.vo.MemberStateVO;
@@ -174,5 +175,27 @@ public class AdminServiceImp implements AdminService {
 	public boolean deleteDeposit(int dpNum) {
 		// TODO Auto-generated method stub
 		return  adDao.depositDelete(dpNum);
+	}
+
+	@Override
+	public List<LoanSubscriptionVO> selectLaSubList(Criteria cri) {
+		if(cri == null)
+			return null;
+		return adDao.selectLaSubList(cri);
+	}
+
+	@Override
+	public boolean lsOk(LoanSubscriptionVO laSub) {
+		System.out.println(laSub + "임플 라썹~~");
+		if(laSub == null) {
+			return false;
+		}
+		boolean res = adDao.isOk(laSub);
+		if(res) {
+			adDao.addLoanRepayment(laSub);
+		}else {
+			return false;
+		}
+		return true;
 	}
 }

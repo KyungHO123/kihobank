@@ -1,11 +1,13 @@
 package kr.jkh.khbank.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.DepositVO;
+import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
 import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MemberAuthorityVO;
 import kr.jkh.khbank.model.vo.MemberStateVO;
@@ -53,6 +55,10 @@ public interface AdminService {
 	boolean depositUpdate(DepositVO deposit);
 
 	boolean deleteDeposit(int dpNum);
+
+	List<LoanSubscriptionVO> selectLaSubList(Criteria cri);
+
+	boolean lsOk(LoanSubscriptionVO laSub);
 
 
 

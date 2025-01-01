@@ -34,6 +34,8 @@ public interface LoanDAO {
 
 	LoanSubscriptionVO getMemberLoanSub(@Param("id")String meID);
 
+	void UpdateLoanMaturity(@Param("num")int lsNum,@Param("date")Date maturityDate);
+
 	
 	 
 

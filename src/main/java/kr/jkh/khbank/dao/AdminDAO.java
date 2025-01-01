@@ -10,6 +10,7 @@ import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.DepositVO;
+import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
 import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MemberAuthorityVO;
 import kr.jkh.khbank.model.vo.MemberStateVO;
@@ -58,6 +59,12 @@ public interface AdminDAO {
 	boolean depositUpdate(@Param("dp")DepositVO deposit);
 
 	boolean depositDelete(@Param("num")int dpNum);
+
+	List<LoanSubscriptionVO> selectLaSubList(@Param("cri")Criteria cri);
+
+	boolean isOk(@Param("ls")LoanSubscriptionVO laSub);
+
+	boolean addLoanRepayment(@Param("ls")LoanSubscriptionVO laSub);
 	
 
 	 

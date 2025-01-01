@@ -19,7 +19,7 @@ public interface DepositDAO {
 
 	MaturityDateVO getMaDate(@Param("num")int dsMdNum);
 
-	Object UpdateDepositMaturity(@Param("num")int dsNum, @Param("date") Date maturityDate);
+	void UpdateDepositMaturity(@Param("num")int dsNum, @Param("date") Date maturityDate);
 
 	 
 	

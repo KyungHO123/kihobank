@@ -101,5 +101,10 @@
 	insert into loanSubscription(lsApp,lsAccount,lsAmount,lsMeID,lsLaNum,lsReNum,lsLtNum,lsMdNum)
 	values(NOW(),#{ls.lsAccount},#{ls.lsAmount},#{ls.lsMeID},#{ls.lsLaNum},#{ls.lsReNum},2,#{ls.lsMdNum})
 </insert>
+
+<update id="UpdateLoanMaturity">
+	update loanSubscription set lsMaturity = #{date} where lsNum = #{num}
+
+</update>
 	
 </mapper>
