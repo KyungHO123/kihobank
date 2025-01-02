@@ -97,6 +97,7 @@
 	                    </td>
 	                </tr>
 	                <input type="hidden" value="\${ls.lsAmount}" id="lsAmount"/>
+	                <input type="hidden" value="\${ls.lsMeID}" id="lsMeID"/>
 	                `;
 	        });
 	    } else {
@@ -144,7 +145,8 @@
 $(document).on("click","#app-btnBtn",function(){
 	let laSub = {
 			lsNum : $(this).data("id"),
-			lsAmount : $("#lsAmount").val()
+			lsAmount : $("#lsAmount").val(),
+			lsMeID : $("#lsMeID").val()
 	}
 	
 	$.ajax({

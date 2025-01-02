@@ -23,6 +23,10 @@ public interface LoanService {
 	LoanSubscriptionVO getMemberLoanSub(String meID);
 
 	void UpdateLoanMaturity(int lsNum, Date maturityDate);
+
+	boolean loanRepay(LoanSubscriptionVO laSub);
+
+	List<LoanSubscriptionVO> getLoanSubList();
  
 
 

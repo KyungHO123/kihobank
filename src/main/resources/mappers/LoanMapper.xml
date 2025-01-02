@@ -106,5 +106,34 @@
 	update loanSubscription set lsMaturity = #{date} where lsNum = #{num}
 
 </update>
+
+<select id="getMaturity" resultType="MaturityDateVO">
+	select * from maturityDate where mdNum = #{num}
+</select>
+<select id="getLoanRepayment" resultType="LoanRepaymentVO">
+	select * from loanRepayment where lrNum = #{num}
+</select>
+<select id="getAccount" resultType="AccountVO">
+	select * from account where acMeID = #{id}
+</select>
+
+<select id="getLoanSubList" resultType="LoanSubscriptionVO">
+	select * from loanSubscription 
+</select>
+
+<update id="updateRepayment">
+	update loanRepayMent 
+	set 
+	lrBalance = #{lr.lrBalance},
+	lrAmount = #{lr.lrAmount}
+	where 
+	lrNum = #{lr.lrNum}
+</update>
+<update id="updateAccount">
+	update account set
+	acBalance = #{ac.acBalance}
+	where
+	acHeadNum = #{ac.acHeadNum}
+</update>
 	
 </mapper>

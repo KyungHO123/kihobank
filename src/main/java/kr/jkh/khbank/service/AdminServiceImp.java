@@ -24,6 +24,12 @@ public class AdminServiceImp implements AdminService {
 
 	@Autowired
 	private AdminDAO adDao;
+	
+	@Override
+	public AccountVO selectMemberAccount(String meID) {
+		// TODO Auto-generated method stub
+		return adDao.selectMemberAccount(meID);
+	}
 
 	@Override
 	public boolean addLoan(LoanVO loan, MemberVO user) {
@@ -185,17 +191,28 @@ public class AdminServiceImp implements AdminService {
 	}
 
 	@Override
-	public boolean lsOk(LoanSubscriptionVO laSub) {
-		System.out.println(laSub + "임플 라썹~~");
+	public boolean lsOk(LoanSubscriptionVO laSub,AccountVO ac) {
 		if(laSub == null) {
 			return false;
 		}
+		System.out.println(ac + "임플 어카운트");
 		boolean res = adDao.isOk(laSub);
+		int newBalance = (int) (ac.getAcBalance() + laSub.getLsAmount());
 		if(res) {
+			ac.setAcBalance(newBalance);
+			adDao.updateAccountBalance(ac);
 			adDao.addLoanRepayment(laSub);
 		}else {
 			return false;
 		}
 		return true;
 	}
+
+	@Override
+	public MemberVO getLaSubMemberID(String lsMeID) {
+		// TODO Auto-generated method stub
+		return adDao.getLaSubMemberID(lsMeID);
+	}
+
+
 }

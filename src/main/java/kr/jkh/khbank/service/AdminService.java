@@ -58,7 +58,11 @@ public interface AdminService {
 
 	List<LoanSubscriptionVO> selectLaSubList(Criteria cri);
 
-	boolean lsOk(LoanSubscriptionVO laSub);
+	boolean lsOk(LoanSubscriptionVO laSub, AccountVO ac);
+
+	AccountVO selectMemberAccount(String meID);
+
+	MemberVO getLaSubMemberID(String lsMeID);
 
 
 

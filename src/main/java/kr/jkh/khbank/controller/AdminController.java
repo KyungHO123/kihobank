@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.jkh.khbank.model.vo.AccountVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.DepositVO;
 import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
@@ -299,7 +300,12 @@ public class AdminController {
 		if(user.getMeMaNum() != 2 ||user == null) {
 			return null;
 		}
-		boolean res = adminService.lsOk(laSub);
+		System.out.println(laSub.getLsMeID() + "아이디읻이디이");
+		MemberVO member = adminService.getLaSubMemberID(laSub.getLsMeID());
+		System.out.println(member + "멤버컨트롤러");
+		AccountVO ac = adminService.selectMemberAccount(member.getMeID());
+		System.out.println(ac + "어카컨트롤러");
+		boolean res = adminService.lsOk(laSub,ac);
 		map.put("res", res);
 		return map;
 	}
