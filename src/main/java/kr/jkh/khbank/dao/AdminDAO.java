@@ -65,6 +65,14 @@ public interface AdminDAO {
 	boolean isOk(@Param("ls")LoanSubscriptionVO laSub);
 
 	boolean addLoanRepayment(@Param("ls")LoanSubscriptionVO laSub);
+
+	AccountVO getAccount(@Param("id")String lsMeID);
+
+	void updateAccountBalance(@Param("ac")AccountVO ac);
+
+	AccountVO selectMemberAccount(@Param("id")String meID);
+
+	MemberVO getLaSubMemberID(@Param("id")String lsMeID);
 	
 
 	 

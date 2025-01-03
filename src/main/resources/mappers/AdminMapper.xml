@@ -208,4 +208,17 @@
 		values(DATE_ADD(CURDATE(), INTERVAL 30 DAY),0,#{ls.lsAmount},#{ls.lsNum},1,1)
 	</insert>
 	
+	<select id="getAccount" resultType="AccountVO">
+		select * from account where acMeID = #{id}
+	</select>
+	<select id="selectMemberAccount" resultType="AccountVO">
+		select * from account where acMeID = #{id}
+	</select>
+	<select id="getLaSubMemberID" resultType="MemberVO">
+		select * from member where meID = #{id}
+	</select>
+	
+	<update id="updateAccountBalance">
+		update account set acBalance = #{ac.acBalance} where acHeadNum = #{ac.acHeadNum}
+	</update>
 </mapper>

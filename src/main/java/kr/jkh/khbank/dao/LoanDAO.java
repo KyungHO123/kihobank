@@ -10,6 +10,7 @@ import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.DepositVO;
+import kr.jkh.khbank.model.vo.LoanRepaymentVO;
 import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
 import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MaturityDateVO;
@@ -35,6 +36,18 @@ public interface LoanDAO {
 	LoanSubscriptionVO getMemberLoanSub(@Param("id")String meID);
 
 	void UpdateLoanMaturity(@Param("num")int lsNum,@Param("date")Date maturityDate);
+
+	MaturityDateVO getMaturity(@Param("num")int lsMdNum);
+
+	LoanRepaymentVO getLoanRepayment(@Param("num")int lsNum);
+
+	AccountVO getAccount(@Param("id")String lsMeID);
+
+	boolean updateRepayment(@Param("lr")LoanRepaymentVO lr);
+
+	boolean updateAccount(@Param("ac")AccountVO ac);
+
+	List<LoanSubscriptionVO> getLoanSubList();
 
 	
 	 

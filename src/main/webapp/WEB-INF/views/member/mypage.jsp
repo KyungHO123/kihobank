@@ -43,7 +43,7 @@
 			        <p id="num"class="text-muted mt-2" style="font-size: 1.3rem;">${account.acNum}</p>
 			        <p class="text-muted mt-2" style="font-size: 0.9rem;">계좌 잔액</p>
 			        <h5 id="balance"class="card-text text-primary fw-bold mt-3">${account.acBalance}원</h5>
-			        <a href="#cc" class="btn btn-outline-primary mt-4">이체하기</a>
+			        <button class="btn btn-outline-primary mt-4" id="tr">이체하기</button>
 			        <a href="<c:url value='/account/accountDetail'/>" class="btn btn-outline-success mt-4">상세보기</a>
 		        </c:when>
 		        <c:otherwise>
@@ -90,7 +90,43 @@
             <a href="<c:url value='/member/delete'/>" id="delete" class="btn btn-danger btn-delete">회원탈퇴</a>
         </div> 
     </div>
+    
+    
+    <div id="modal">
+        <div class="modal fade" id="editLoanModal" tabindex="-1" aria-labelledby="editLoanModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="editLoanModalLabel">계좌이체</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		            </div>
+		            <div class="modal-body">
+	                    <input type="hidden" name="trNum" id="trNum">
+	                    <div class="mb-3">
+	                        <label for="trAcNum" class="form-label">계좌번호</label>
+	                        <input type="text"  class="form-control" id="trAcNum" name="trAcNum" required>
+	                        <button class="btn btn-success" id="search-btn" >계좌조회</button>
+	                    </div>
+	                    <div class="mb-3">
+	                        <label for="trBalance" class="form-label">이체금액</label>
+	                        <input  type="text" class="form-control" id="trBalance" name="trBalance" required>
+	                    </div>
+	                    <div class="mb-3">
+	                        <label for="trMemo" class="form-label">메모</label>
+	                        <textarea  placeholder="메모를 입력하세요" class="form-control" id="trMemo" name="trMemo" required></textarea>
+	                    </div>
+	                    <input type="hidden" name="trName" id="trName">
+	                    <input type="hidden" name="trAcHeadNum" id="trAcHeadNum">
+	                    <button type="button" id="transaction" class="btn btn-primary w-100">이체하기</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+     </div>
 <script type="text/javascript">
+const modal = new bootstrap.Modal(document.getElementById('editLoanModal'));
+
+
 	let btn = $('#delete');
 	btn.on('click',function(event){
 		let ans = confirm("정말 탈퇴하시겠습니까?");
@@ -118,6 +154,104 @@
 	if(${account.acBalance != null}){
 		$('#balance').text(format(${account.acBalance}) + "원");
 	}
+	
+	$(document).on("click","#tr",function(){
+		modal.show();
+	});
+	
+	//검색 ajax
+	$(document).on("click","#search-btn",function(){
+		let transaction = {
+				
+				trAcNum : $("#trAcNum").val()
+				
+				
+		}
+		if(!transaction.trAcNum){
+			alert("계좌번호를 입력해주세요.");
+			return;
+		}else if(transaction.trAcNum.length > 13){
+			alert("계좌번호를 다시 입력해주세요\n13자 초과입력");
+			return;
+		}
+		 else if(transaction.trAcNum.length < 13){
+			alert("계좌번호를 다시 입력해주세요\n13자 미만입력");
+			return;
+		} 
+		 $.ajax({ 
+	         async : true,
+	         url : '<c:url value="/searchAccount"/>', 
+	         type : 'post', 
+	         data : JSON.stringify(transaction),
+	         contentType : "application/json; charset=utf-8",
+	         dataType : "json", 
+	         success : function (data){
+	        	if(data.error){
+	        		alert(data.error);
+	        		return;
+	        	}
+	        	if(confirm("이름 : " + data.meAc.member.meName + "\n" +
+	        			"계좌번호 : " + data.meAc.acNum + "\n" + 
+	        			"위 정보가 맞습니까?")){
+	        		alert("정보가 확인되었습니다.");
+	        		$("#trName").val(data.meAc.member.meName);
+	        		$("#trAcHeadNum").val(data.meAc.acHeadNum);
+	        		$("#trAcNum").prop("readonly", true);
+	        	}else{
+	        		return;
+	        	}
+	         }, 
+	         error : function(jqXHR, textStatus, errorThrown){
+
+	         }
+	      });
+	});
+	$(document).on("click","#transaction",function(){
+		if(!$("#trName").val()){
+			alert("계좌조회를 먼저 해주세요.");
+			return
+		}
+		let tr = {
+			trAcNum : $("#trAcNum").val(),
+			trName : $("#trName").val(),
+			trMemo : $("#trMemo").val(),
+			trBalance : $("#trBalance").val(),
+			trAcHeadNum : $("#trAcHeadNum").val(),
+			trNum : $("#trNum").val()
+		}
+		if(!tr.trBalance){
+			alert("이체 금액을 입력하세요.");
+			return;
+		}else if(!tr.trMemo){
+			alert("메모를 입력하세요.");
+			return;
+		}
+		 $.ajax({ 
+	         async : true,
+	         url : '<c:url value="/transaction"/>', 
+	         type : 'post', 
+	         data : JSON.stringify(tr),
+	         contentType : "application/json; charset=utf-8",
+	         dataType : "json", 
+	         success : function (data){
+	        	 console.log(data);
+	        	 console.log(data.res);
+	        	 if(data.error){
+	        		 alert(data.error);
+	        	 }
+				if(data.res){
+					alert("송금완료");
+					modal.hide();
+					return
+				}else{
+					alert("송금실패");
+				}
+	         }, 
+	         error : function(jqXHR, textStatus, errorThrown){
+
+	         }
+	      });
+	})
 </script>
 </body>
 </html>
