@@ -3,7 +3,9 @@ package kr.jkh.khbank.controller;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.jkh.khbank.model.dto.LoginDTO;
 import kr.jkh.khbank.model.vo.AccountVO;
@@ -20,6 +24,7 @@ import kr.jkh.khbank.model.vo.DepositSubscriptionVO;
 import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
 import kr.jkh.khbank.model.vo.MaturityDateVO;
 import kr.jkh.khbank.model.vo.MemberVO;
+import kr.jkh.khbank.model.vo.TransactionVO;
 import kr.jkh.khbank.model.vo.logVO;
 import kr.jkh.khbank.service.AccountService;
 import kr.jkh.khbank.service.DepositService;
@@ -206,6 +211,42 @@ public class HomeController {
 
 		return "/member/asset";
 	}
+	@ResponseBody
+	@PostMapping("/searchAccount")
+	public Map<String, Object> searchAccount(@RequestBody TransactionVO transaction) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		//입력받은 계좌번호를 넘겨주면서 일치하는 계좌번호를 찾음
+		AccountVO meAc = accountService.getAccount(transaction.getTrAcNum());
+		System.out.println(meAc +"검색 메소드");
+		if(meAc == null) {
+			map.put("error", "계좌번호를 찾을 수 없습니다.");
+			return map;
+		}
+		
+		map.put("meAc", meAc);
+		return map;
+	}
+	@ResponseBody
+	@PostMapping("/transaction")
+	public Map<String, Object> transaction(@RequestBody TransactionVO transaction,HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		System.out.println(transaction + "transaction 컨트롤러~~!@@#!@!@!@!@!");
+		AccountVO myAccount = accountService.getMembetAccount(member.getMeID());
+		AccountVO receiverAccount = accountService.getMyAccount(transaction.getTrAcHeadNum());
+		System.out.println(myAccount + "어카운트 컨트롤러~~!@@#!@!@!@!@!");
+		if(myAccount.getAcBalance() < transaction.getTrBalance()) {
+			map.put("error", "잔액이 부족합니다.");
+			return map;
+		}
+		boolean res = accountService.transaction(transaction,myAccount,receiverAccount);
+		
+		map.put("res", res);
+		return map;
+	}
+	
+	
+	
 
 	public Date depositMaturityDate(HttpSession session) {
 		MemberVO member = (MemberVO) session.getAttribute("member");

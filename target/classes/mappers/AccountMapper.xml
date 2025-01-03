@@ -44,4 +44,16 @@
 		update account set acBalance = #{ac.acBalance}
 		where acHeadNum = #{ac.acHeadNum}
 	</update>
+	
+	<select id="getTrAccount" resultMap="accountMap">
+		select * from account where acNum = #{ac}
+	</select>
+	<select id="getMyAccount" resultMap="accountMap">
+		select * from account where acHeadNum = #{num}
+	</select>
+	
+	<insert id="saveTransaction">
+		insert into transaction(trDate,trBalance,trName,trAcNum,trMemo,trAfter,trAcHeadNum,acTtNum,trFeeNum)
+		values(NOW(),#{tr.trBalance},#{tr.trName},#{tr.trAcNum},#{tr.trMemo},#{tr.trAfter},#{tr.trAcHeadNum},1,2)
+	</insert>
 </mapper>

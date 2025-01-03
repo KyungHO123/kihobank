@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
 import kr.jkh.khbank.model.vo.MemberVO;
+import kr.jkh.khbank.model.vo.TransactionVO;
 import kr.jkh.khbank.model.vo.logVO;
 
 public interface AccountDAO {
@@ -26,6 +27,12 @@ public interface AccountDAO {
 	void updateAccount(@Param("ac") AccountVO account);
 
 	AccountVO getMyAccount(@Param("ac")String meID);
+
+	AccountVO getTrAccount(@Param("ac")String trAcNum);
+
+	AccountVO getMyAccount(@Param("num")int trAcHeadNum);
+
+	void saveTransaction(@Param("tr")TransactionVO transaction);
 
 
 }
