@@ -6,90 +6,100 @@
 
 
 
-<resultMap id="memberMap" type="MemberVO">
-    <id property="meID" column="meID" />
-    <result property="meName" column="meName" />
-    <result property="mePw" column="mePw" />
-    <result property="meEmail" column="meEmail" />
-    <result property="mePhone" column="mePhone" />
-    <result property="mePost" column="mePost" />
-    <result property="meStreet" column="meStreet" />
-    <result property="meDetail" column="meDetail" />
-    <result property="meSignup" column="meSignup" />
-    <result property="meUpdate" column="meUpdate" />
-    <result property="meMaNum" column="meMaNum" />
-    <result property="meMsNum" column="meMsNum" />
-    <collection property="meState" ofType="MemberStateVO" 
-        column="meMsNum" select="getMeState"/>
-    <collection property="meAuthority" ofType="MemberAuthorityVO" 
-        column="meMaNum" select="getMeAuthority"/>
-    <collection property="account" ofType="AccountVO" 
-        column="meID" select="getMeAccount"/>
-</resultMap>
+	<resultMap id="memberMap" type="MemberVO">
+		<id property="meID" column="meID" />
+		<result property="meName" column="meName" />
+		<result property="mePw" column="mePw" />
+		<result property="meEmail" column="meEmail" />
+		<result property="mePhone" column="mePhone" />
+		<result property="mePost" column="mePost" />
+		<result property="meStreet" column="meStreet" />
+		<result property="meDetail" column="meDetail" />
+		<result property="meSignup" column="meSignup" />
+		<result property="meUpdate" column="meUpdate" />
+		<result property="meMaNum" column="meMaNum" />
+		<result property="meMsNum" column="meMsNum" />
+		<collection property="meState" ofType="MemberStateVO"
+			column="meMsNum" select="getMeState" />
+		<collection property="meAuthority"
+			ofType="MemberAuthorityVO" column="meMaNum" select="getMeAuthority" />
+		<collection property="account" ofType="AccountVO"
+			column="meID" select="getMeAccount" />
+	</resultMap>
 
-<resultMap id="depositMap" type="DepositVO">
-    <id property="dpNum" column="dpNum" />
-    <result property="dpName" column="dpName" />
-    <result property="dpDetail" column="dpDetail" />
-    <result property="dpInterest" column="dpInterest" />
-    <result property="dpDtNum" column="dpDtNum" />
-    <result property="dpCreate" column="dpCreate" />
-    <association property="depositType" javaType="DepositTypeVO" select="getDepositType" column="dpDtNum">
-        <id property="dtNum" column="dpDtNum" />
-        <result property="dtName" column="dtName" />
-    </association>
-</resultMap>
-<resultMap id="laSubMap" type="LoanSubscriptionVO">
-    <id property="lsNum" column="lsNum" />
-    <result property="lsApp" column="lsApp" />
-    <result property="lsOk" column="lsOk" />
-    <result property="lsAccount" column="lsAccount" />
-    <result property="lsMeID" column="lsMeID" />
-    <result property="lsLaNum" column="lsLaNum" />
-    <result property="lsReNum" column="lsReNum" />
-    <result property="lsLtNum" column="lsLtNum" />
-    <result property="lsMdNum" column="lsMdNum" />
-    <result property="lsAmount" column="lsAmount" />
-  <collection property="member" ofType="MemberVO" 
-		column="lsMeID" select="selectLsMember"/>
-  <collection property="loan" ofType="LoanVO" 
-		column="lsLaNum" select="selectLsLoan"/>
-  <collection property="repayMent" ofType="RepayMentVO" 
-		column="lsReNum" select="selectLsRepay"/>
-</resultMap>
+	<resultMap id="depositMap" type="DepositVO">
+		<id property="dpNum" column="dpNum" />
+		<result property="dpName" column="dpName" />
+		<result property="dpDetail" column="dpDetail" />
+		<result property="dpInterest" column="dpInterest" />
+		<result property="dpDtNum" column="dpDtNum" />
+		<result property="dpCreate" column="dpCreate" />
+		<association property="depositType"
+			javaType="DepositTypeVO" select="getDepositType" column="dpDtNum">
+			<id property="dtNum" column="dpDtNum" />
+			<result property="dtName" column="dtName" />
+		</association>
+	</resultMap>
+	<resultMap id="laSubMap" type="LoanSubscriptionVO">
+		<id property="lsNum" column="lsNum" />
+		<result property="lsApp" column="lsApp" />
+		<result property="lsOk" column="lsOk" />
+		<result property="lsAccount" column="lsAccount" />
+		<result property="lsMeID" column="lsMeID" />
+		<result property="lsLaNum" column="lsLaNum" />
+		<result property="lsReNum" column="lsReNum" />
+		<result property="lsLtNum" column="lsLtNum" />
+		<result property="lsMdNum" column="lsMdNum" />
+		<result property="lsAmount" column="lsAmount" />
+		<collection property="member" ofType="MemberVO"
+			column="lsMeID" select="selectLsMember" />
+		<collection property="loan" ofType="LoanVO"
+			column="lsLaNum" select="selectLsLoan" />
+		<collection property="repayMent" ofType="RepayMentVO"
+			column="lsReNum" select="selectLsRepay" />
+	</resultMap>
 
 	<select id="selectLsRepay" resultType="RepayMentVO">
-		select * from repayMent where reNum = #{lsReNum}
+		select * from repayMent
+		where reNum = #{lsReNum}
 	</select>
 	<select id="selectLsLoan" resultType="LoanVO">
-		select * from loan where laNum = #{lsLaNum}
+		select * from loan where
+		laNum = #{lsLaNum}
 	</select>
 	<select id="selectLsMember" resultType="MemberVO">
-		select * from member where meID = #{lsMeID}
+		select * from member
+		where meID = #{lsMeID}
 	</select>
 
 	<select id="getDepositType" resultType="DepositTypeVO">
-		select * from depositType where dtNum = #{num}
-	</select> 
-	
-	<select id="selectAjaxDpType" resultType="DepositTypeVO">
 		select * from depositType
+		where dtNum = #{num}
+	</select>
+
+	<select id="selectAjaxDpType" resultType="DepositTypeVO">
+		select * from
+		depositType
 	</select>
 
 	<select id="getMemberList" resultMap="memberMap">
 		select * from member
 	</select>
 	<select id="getMeAccount" resultType="AccountVO">
-		select * from account where acMeID = #{meID}
+		select * from account where
+		acMeID = #{meID}
 	</select>
 	<select id="getMeAuthority" resultType="MemberAuthorityVO">
-		select * from memberAuthority where maNum = #{meMaNum}
+		select * from
+		memberAuthority where maNum = #{meMaNum}
 	</select>
-	<select id="getMeState"	 resultType="MemberStateVO">
-		select * from memberState where msNum = #{meMsNum}
+	<select id="getMeState" resultType="MemberStateVO">
+		select * from memberState
+		where msNum = #{meMsNum}
 	</select>
 	<insert id="addDeposit">
-		insert into deposit(dpName,dpDetail,dpInterest,dpDtNum,dpCreate)
+		insert into
+		deposit(dpName,dpDetail,dpInterest,dpDtNum,dpCreate)
 		values(#{dp.dpName},#{dp.dpDetail},#{dp.dpInterest},#{dp.dpDtNum},NOW())
 	</insert>
 
@@ -148,7 +158,8 @@
 		UPDATE deposit
 		SET
 		dpName = #{dp.dpName},
-		dpInterest = #{dp.dpInterest},
+		dpInterest =
+		#{dp.dpInterest},
 		dpDtNum = #{dp.dpDtNum},
 		dpDetail = #{dp.dpDetail}
 		WHERE
@@ -158,7 +169,8 @@
 		UPDATE member
 		SET
 		meMsNum = #{me.meMsNum},
-		meMaNum = #{me.meMaNum}
+		meMaNum =
+		#{me.meMaNum}
 		WHERE
 		meID = #{me.meID}
 	</update>
@@ -171,15 +183,17 @@
 		WHERE dpNum = #{num}
 	</delete>
 	<select id="getDepositTypeList" resultType="DepositTypeVO">
-		select * from depositType
+		select * from
+		depositType
 	</select>
 	<select id="getMemberState" resultType="MemberStateVO">
 		select * from memberState
 	</select>
 	<select id="getMemberauthority" resultType="MemberAuthorityVO">
-		select * from memberAuthority
+		select * from
+		memberAuthority
 	</select>
-	
+
 	<select id="getDepositList" resultMap="depositMap">
 		select * from deposit
 		order by dpNum desc
@@ -190,35 +204,87 @@
 		select count(*) from
 		deposit
 	</select>
-	
+
 	<select id="getDepositNum" resultMap="depositMap">
-		select * from deposit where dpNum = #{num}
+		select * from deposit where
+		dpNum = #{num}
 	</select>
-	
+
 	<select id="selectLaSubList" resultMap="laSubMap">
-		select * from loanSubscription where lsLtNum = 2	
-			order by lsNum desc
+		select * from
+		loanSubscription where lsLtNum = 2
+		order by lsNum desc
 		limit
 		#{cri.pageStart}, #{cri.perPageNum}
-	
+
 	</select>
-	
+
 	<insert id="addLoanRepayment">
-		insert into loanRepayment(lrDate,lrAmount,lrBalance,lrLsNum,lrRtNum,lrOdNum)
-		values(DATE_ADD(CURDATE(), INTERVAL 30 DAY),0,#{ls.lsAmount},#{ls.lsNum},1,1)
+		insert into
+		loanRepayment(lrDate,lrAmount,lrBalance,lrLsNum,lrRtNum,lrOdNum)
+		values(DATE_ADD(CURDATE(), INTERVAL 30
+		DAY),0,#{ls.lsAmount},#{ls.lsNum},1,1)
 	</insert>
-	
+
 	<select id="getAccount" resultType="AccountVO">
-		select * from account where acMeID = #{id}
+		select * from account where
+		acMeID = #{id}
 	</select>
 	<select id="selectMemberAccount" resultType="AccountVO">
-		select * from account where acMeID = #{id}
+		select * from
+		account where acMeID = #{id}
 	</select>
 	<select id="getLaSubMemberID" resultType="MemberVO">
-		select * from member where meID = #{id}
+		select * from member
+		where meID = #{id}
 	</select>
-	
+
 	<update id="updateAccountBalance">
-		update account set acBalance = #{ac.acBalance} where acHeadNum = #{ac.acHeadNum}
+		update account set acBalance = #{ac.acBalance} where
+		acHeadNum = #{ac.acHeadNum}
 	</update>
+	
+	<resultMap id="dpSubMap" type="DepositSubscriptionVO">
+		<id property="dsNum" column="dsNum" />
+		<result property="dsAccount" column="dsAccount" />
+		<result property="dsAmount" column="dsAmount" />
+		<result property="dsSubDate" column="dsSubDate" />
+		<result property="dsMaturity" column="dsMaturity" />
+		<result property="dsCloseDate" column="dsCloseDate" />
+		<result property="dsDpNum" column="dsDpNum" />
+		<result property="dsMeID" column="dsMeID" />
+		<result property="dsSsNum" column="dsSsNum" />
+		<result property="dsMdNum" column="dsMdNum" />
+		<collection property="member" ofType="MemberVO"
+			column="dsMeID" select="selectDsMeID" />
+		<collection property="deposit" ofType="DepositVO"
+			column="dsDpNum" select="selectDpNum" />
+		<collection property="state" ofType="SubscriptionstateVO"
+			column="dsSsNum" select="selectDsSsNum" />
+	</resultMap>
+	<select id="selectDsSsNum" resultType="SubscriptionstateVO">
+		select * from Subscriptionstate where ssNum = #{dsSsNum}
+	</select>
+	<select id="selectDsMeID" resultType="MemberVO">
+		select * from member where meID = #{dsMeID}
+	</select>
+	<select id="selectDpNum" resultType="DepositVO">
+		select * from deposit where dpNum = #{dsDpNum}
+	</select>
+	<select id="selectDpSubList" resultMap="dpSubMap">
+		select * from depositSubscription
+		order by dsNum desc
+		limit
+		#{cri.pageStart}, #{cri.perPageNum}
+	</select>
+
+	<select id="getDpSubTotalCount" resultType="int">
+		select count(*) from
+		depositSubscription
+	</select>
+
+	<select id="getLaSubTotalCount" resultType="int">
+		select count(*) from
+		loanSubscription
+	</select>
 </mapper>

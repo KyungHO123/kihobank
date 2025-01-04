@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.jkh.khbank.dao.AdminDAO;
 import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
+import kr.jkh.khbank.model.vo.DepositSubscriptionVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.DepositVO;
 import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
@@ -212,6 +213,28 @@ public class AdminServiceImp implements AdminService {
 	public MemberVO getLaSubMemberID(String lsMeID) {
 		// TODO Auto-generated method stub
 		return adDao.getLaSubMemberID(lsMeID);
+	}
+
+	@Override
+	public List<DepositSubscriptionVO> selectDpSubList(Criteria cri) {
+		if(cri == null)
+			return null;
+		// TODO Auto-generated method stub
+		return adDao.selectDpSubList(cri);
+	}
+
+	@Override
+	public int getDpSubTotalCount(Criteria cri) {
+		if(cri == null)
+			return 0;
+		return adDao.getDpSubTotalCount(cri);
+	}
+
+	@Override
+	public int getLaSubTotalCount(Criteria cri) {
+		if(cri == null)
+			return 0;
+		return adDao.getLaSubTotalCount(cri);
 	}
 
 

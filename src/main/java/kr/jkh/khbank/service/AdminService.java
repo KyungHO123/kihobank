@@ -5,6 +5,7 @@ import java.util.List;
 
 import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
+import kr.jkh.khbank.model.vo.DepositSubscriptionVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.DepositVO;
 import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
@@ -63,6 +64,12 @@ public interface AdminService {
 	AccountVO selectMemberAccount(String meID);
 
 	MemberVO getLaSubMemberID(String lsMeID);
+
+	List<DepositSubscriptionVO> selectDpSubList(Criteria cri);
+
+	int getDpSubTotalCount(Criteria cri);
+
+	int getLaSubTotalCount(Criteria cri);
 
 
 

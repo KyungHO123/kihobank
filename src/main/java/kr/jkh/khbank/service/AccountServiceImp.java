@@ -14,13 +14,13 @@ import kr.jkh.khbank.model.vo.TransactionVO;
 
 @Service
 public class AccountServiceImp implements AccountService {
-	
+
 	@Autowired
 	private AccountDAO acDao;
 
 	@Override
 	public AccountVO getMembetAccount(String meID) {
-		if(meID == null) {
+		if (meID == null) {
 			return null;
 		}
 		return acDao.getMemberAccount(meID);
@@ -34,10 +34,10 @@ public class AccountServiceImp implements AccountService {
 	@Override
 	public boolean createAccount(AccountVO account, String id) {
 		AccountVO ac = acDao.getMemberAccount(id);
-		if(id == null||ac != null )
+		if (id == null || ac != null)
 			return false;
-		boolean add = acDao.createAccount(account,id);
-		if(!add)
+		boolean add = acDao.createAccount(account, id);
+		if (!add)
 			return false;
 		return true;
 	}
@@ -51,47 +51,47 @@ public class AccountServiceImp implements AccountService {
 	@Override
 	public void applyInterest() {
 		List<AccountVO> accounts = acDao.acoountList();
-		
-		for(AccountVO account : accounts) {
-			if(account == null) {
+
+		for (AccountVO account : accounts) {
+			if (account == null) {
 				return;
 			}
-			if(account.getAcInterest() > 0) {
-				double newBalance = account.getAcBalance() + (account.getAcBalance() * account.getAcInterest()/12); 
+			if (account.getAcInterest() > 0) {
+				double newBalance = account.getAcBalance() + (account.getAcBalance() * account.getAcInterest() / 12);
 				account.setAcBalance(newBalance);
 				acDao.updateAccount(account);
-				
+
 			}
 		}
 	}
 
 	@Override
 	public AccountVO getAccount(String trAcNum) {
-		if(trAcNum == null)
+		if (trAcNum == null)
 			return null;
 		return acDao.getTrAccount(trAcNum);
 	}
 
 	@Override
-	public boolean transaction(TransactionVO transaction, AccountVO myAccount,AccountVO receiverAccount) {
-		System.out.println(transaction + "트랜잭션서비스임플@@@@@@@@@@@@@");
-		System.out.println(myAccount + "마어카서비스임플@@@@@@@@@@");
-		if(transaction == null && myAccount == null) {
+	public boolean transaction(TransactionVO transaction, AccountVO myAccount, AccountVO receiverAccount) {
+		if (transaction == null && myAccount == null) {
 			return false;
 		}
-		if(transaction.getTrBalance() <= 0)
+		if (transaction.getTrBalance() <= 0)
 			return false;
+		//계좌이체를 회원에 했을 때
 		int after = (int) (myAccount.getAcBalance() - transaction.getTrBalance());
-		System.out.println(after+"애프터~!~!~!~!~!~!~!~!");
-		//받는사람
 		int newBalance = (int) (receiverAccount.getAcBalance() + transaction.getTrBalance());
-		myAccount.setAcBalance(after);
-		transaction.setTrAfter(after);
-		receiverAccount.setAcBalance(newBalance);
-		acDao.updateAccount(myAccount);
-		acDao.updateAccount(receiverAccount);
-		acDao.saveTransaction(transaction);
-		
+		if (transaction.getTrAcNum().equals(receiverAccount.getAcNum())) {
+			myAccount.setAcBalance(after);
+			transaction.setTrAfter(after);
+			receiverAccount.setAcBalance(newBalance);
+			acDao.updateAccount(myAccount);
+			acDao.updateAccount(receiverAccount);
+			acDao.saveTransaction(transaction);
+			return true;
+		}
+
 		return true;
 	}
 
@@ -99,7 +99,5 @@ public class AccountServiceImp implements AccountService {
 	public AccountVO getMyAccount(int trAcHeadNum) {
 		return acDao.getMyAccount(trAcHeadNum);
 	}
-
-
 
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.jkh.khbank.model.vo.AccountVO;
+import kr.jkh.khbank.model.vo.DepositSubscriptionVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.DepositVO;
 import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
@@ -284,7 +285,7 @@ public class AdminController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		cri.setPerPageNum(10);
 		List<LoanSubscriptionVO> laSub = adminService.selectLaSubList(cri);
-		int totalCount = adminService.getDpTotalCount(cri);
+		int totalCount = adminService.getLaSubTotalCount(cri);
 		PageMaker pm = new PageMaker(10, cri, totalCount);
 		map.put("laSub", laSub);
 		map.put("pm", pm);
@@ -307,6 +308,37 @@ public class AdminController {
 		System.out.println(ac + "어카컨트롤러");
 		boolean res = adminService.lsOk(laSub,ac);
 		map.put("res", res);
+		return map;
+	}
+	@GetMapping("/admin/depositList")
+	public String depositList(Model model,HttpSession session) {
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		if(member == null) {
+			model.addAttribute("msg","로그인이 필요한 페이지입니다.");
+			model.addAttribute("url","/member/login");
+			return "message";
+		}
+		if(member.getMeMaNum() != 2) {
+			model.addAttribute("msg","접근할 수 없는 페이지입니다.");
+			model.addAttribute("url","/");
+			return "message";
+		}
+		
+		
+		return "/admin/depositList";
+	}
+	@ResponseBody
+	@PostMapping("/admin/ajaxDepositList")
+	public Map<String, Object> ajaxDepositList(@RequestBody Criteria cri) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		cri.setPerPageNum(10);
+		List<DepositSubscriptionVO> dpSub = adminService.selectDpSubList(cri);
+		int totalCount = adminService.getDpSubTotalCount(cri);
+		PageMaker pm = new PageMaker(10, cri, totalCount);
+		map.put("dpSub", dpSub);
+		map.put("pm", pm);
+		
+		
 		return map;
 	}
 }
