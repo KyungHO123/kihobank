@@ -231,10 +231,12 @@ public class HomeController {
 	public Map<String, Object> transaction(@RequestBody TransactionVO transaction,HttpSession session) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		MemberVO member = (MemberVO)session.getAttribute("member");
-		System.out.println(transaction + "transaction 컨트롤러~~!@@#!@!@!@!@!");
 		AccountVO myAccount = accountService.getMembetAccount(member.getMeID());
 		AccountVO receiverAccount = accountService.getMyAccount(transaction.getTrAcHeadNum());
-		System.out.println(myAccount + "어카운트 컨트롤러~~!@@#!@!@!@!@!");
+		//member.getMeID를 넘겨주며 대출 정보 가져오기
+//		LoanSubscriptionVO myLaSub = loanService.getMemberLoanSub(member.getMeID());
+		//member.getMeID를 넘겨주며 저축 정보 가져오기
+//		DepositSubscriptionVO myDeSub = depositService.getMemberDepositSub(member.getMeID());
 		if(myAccount.getAcBalance() < transaction.getTrBalance()) {
 			map.put("error", "잔액이 부족합니다.");
 			return map;

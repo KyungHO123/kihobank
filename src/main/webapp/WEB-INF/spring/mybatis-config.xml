@@ -21,5 +21,6 @@
 		<typeAlias type="kr.jkh.khbank.model.vo.MaturityDateVO" alias="MaturityDateVO"/>
 		<typeAlias type="kr.jkh.khbank.model.vo.RepayMentVO" alias="RepayMentVO"/>
 		<typeAlias type="kr.jkh.khbank.model.vo.LoanTypeVO" alias="LoanTypeVO"/>
+		<typeAlias type="kr.jkh.khbank.model.vo.SubscriptionstateVO" alias="SubscriptionstateVO"/>
 	</typeAliases>
 </configuration>

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
+import kr.jkh.khbank.model.vo.DepositSubscriptionVO;
 import kr.jkh.khbank.model.vo.DepositTypeVO;
 import kr.jkh.khbank.model.vo.DepositVO;
 import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
@@ -73,6 +74,12 @@ public interface AdminDAO {
 	AccountVO selectMemberAccount(@Param("id")String meID);
 
 	MemberVO getLaSubMemberID(@Param("id")String lsMeID);
+
+	List<DepositSubscriptionVO> selectDpSubList(@Param("cri")Criteria cri);
+
+	int getDpSubTotalCount(@Param("cri")Criteria cri);
+
+	int getLaSubTotalCount(@Param("cri")Criteria cri);
 	
 
 	 
