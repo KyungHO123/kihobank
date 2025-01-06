@@ -26,6 +26,7 @@ import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MemberAuthorityVO;
 import kr.jkh.khbank.model.vo.MemberStateVO;
 import kr.jkh.khbank.model.vo.MemberVO;
+import kr.jkh.khbank.model.vo.logVO;
 import kr.jkh.khbank.pagination.Criteria;
 import kr.jkh.khbank.pagination.PageMaker;
 import kr.jkh.khbank.service.AdminService;
@@ -341,4 +342,34 @@ public class AdminController {
 		
 		return map;
 	}
-}
+	@GetMapping("/admin/log")
+	public String log(Model model,HttpSession session) {
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		if(member == null) {
+			model.addAttribute("msg","로그인이 필요한 페이지입니다.");
+			model.addAttribute("url","/member/login");
+			return "message";
+		}
+		if(member.getMeMaNum() != 2) {
+			model.addAttribute("msg","접근할 수 없는 페이지입니다.");
+			model.addAttribute("url","/");
+			return "message";
+		}
+		
+		return "/admin/log";
+	}
+	@ResponseBody
+	@PostMapping("/admin/ajaxLogList")
+	public Map<String, Object> ajaxLogList(@RequestBody Criteria cri) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		cri.setPerPageNum(10);
+		List<logVO> log = adminService.selectLogList(cri);
+		int totalCount = adminService.getLogTotalCount(cri);
+		PageMaker pm = new PageMaker(10, cri, totalCount);
+		map.put("log", log);
+		map.put("pm", pm);
+		
+		
+		return map;
+	}
+ }

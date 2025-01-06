@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.jkh.khbank.model.dto.LoginDTO;
 import kr.jkh.khbank.model.vo.AccountVO;
 import kr.jkh.khbank.model.vo.DepositSubscriptionVO;
+import kr.jkh.khbank.model.vo.DepositVO;
 import kr.jkh.khbank.model.vo.LoanSubscriptionVO;
+import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MaturityDateVO;
 import kr.jkh.khbank.model.vo.MemberVO;
 import kr.jkh.khbank.model.vo.TransactionVO;
@@ -44,6 +47,12 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String home(Locale locale, Model model, HttpSession session) {
+		List<LoanVO> loanList = loanService.getLoanList();
+		List<DepositVO> depositList = depositService.getDepositList();
+		
+		model.addAttribute("depositList",depositList);
+		model.addAttribute("loanList",loanList);
+		
 		return "home";
 	}
 
@@ -233,16 +242,12 @@ public class HomeController {
 		MemberVO member = (MemberVO)session.getAttribute("member");
 		AccountVO myAccount = accountService.getMembetAccount(member.getMeID());
 		AccountVO receiverAccount = accountService.getMyAccount(transaction.getTrAcHeadNum());
-		//member.getMeID를 넘겨주며 대출 정보 가져오기
-//		LoanSubscriptionVO myLaSub = loanService.getMemberLoanSub(member.getMeID());
-		//member.getMeID를 넘겨주며 저축 정보 가져오기
-//		DepositSubscriptionVO myDeSub = depositService.getMemberDepositSub(member.getMeID());
 		if(myAccount.getAcBalance() < transaction.getTrBalance()) {
 			map.put("error", "잔액이 부족합니다.");
 			return map;
 		}
 		boolean res = accountService.transaction(transaction,myAccount,receiverAccount);
-		
+		map.put("account", myAccount);
 		map.put("res", res);
 		return map;
 	}

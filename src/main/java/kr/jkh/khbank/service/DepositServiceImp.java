@@ -2,6 +2,7 @@ package kr.jkh.khbank.service;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,11 @@ public class DepositServiceImp implements DepositService {
 		dpDao.UpdateDepositMaturity(dsNum, maturityDate);
 		return;
 
+	}
+
+	@Override
+	public List<DepositVO> getDepositList() {
+		return dpDao.getDepositList();
 	}
 
 }

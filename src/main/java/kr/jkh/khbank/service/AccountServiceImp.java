@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.jkh.khbank.dao.AccountDAO;
 import kr.jkh.khbank.model.vo.AccountLimitVO;
 import kr.jkh.khbank.model.vo.AccountVO;
+import kr.jkh.khbank.model.vo.MemberVO;
 import kr.jkh.khbank.model.vo.TransactionVO;
+import kr.jkh.khbank.pagination.Criteria;
 
 @Service
 public class AccountServiceImp implements AccountService {
@@ -89,8 +91,23 @@ public class AccountServiceImp implements AccountService {
 			acDao.updateAccount(myAccount);
 			acDao.updateAccount(receiverAccount);
 			acDao.saveTransaction(transaction);
+			
+			
+			TransactionVO tr = new TransactionVO();
+			tr.setTrAcNum(myAccount.getAcNum());
+			tr.setTrAcHeadNum(receiverAccount.getAcHeadNum());
+			tr.setTrName(transaction.getTrSender());
+			tr.setTrSender(transaction.getTrName());
+			tr.setTrBalance(transaction.getTrBalance());
+			tr.setAcTtNum(1);
+			tr.setTrMemo(transaction.getTrMemo());
+			tr.setTrAfter(newBalance);
+			tr.setTrMyAccount(receiverAccount.getAcNum());
+			acDao.saveTransaction2(tr);
 			return true;
 		}
+		// 입금 내역
+	
 
 		return true;
 	}
@@ -99,5 +116,22 @@ public class AccountServiceImp implements AccountService {
 	public AccountVO getMyAccount(int trAcHeadNum) {
 		return acDao.getMyAccount(trAcHeadNum);
 	}
+
+	@Override
+	public List<TransactionVO> selectTrList(Criteria cri, AccountVO ac) {
+		if(cri == null && ac == null)
+		return null;
+		
+		return acDao.selectTrList(cri,ac);
+	}
+
+	@Override
+	public int getTrTotalCount(Criteria cri, AccountVO ac) {
+		if(cri == null && ac == null)
+			return 0;
+		return acDao.getTrTotalCount(cri,ac);
+	}
+
+	
 
 }

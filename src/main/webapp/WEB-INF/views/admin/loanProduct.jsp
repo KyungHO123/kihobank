@@ -216,7 +216,7 @@ getLoanList(cri);
 		                    <td>\${loan.laInterest * 100}%</td>
 		                    <td>\${loan.laLimitMin}</td>
 		                    <td>\${loan.laLimitMax}</td>
-		                    <td>\${loan.laOverdue * 100}</td>
+		                    <td>\${loan.laOverdue * 100}%</td>
 		                    <td>\${loan.changeDate}</td>
 		                    <td>
 		                        <button class="btn btn-warning btn-sm " id="btn-btn-update" data-num="\${loan.laNum}">수정</button>

@@ -88,7 +88,7 @@
 		                    <td>\${ls.lsMeID}</td>
 		                    <td>\${ls.member.meName}</td>
 		                    <td>\${ls.loan.laName}</td>
-		                    <td>\${ls.lsAmount}</td>
+		                    <td>\${ls.lsAmount}원</td>
 		                    <td>\${ls.repayMent.reName}</td>
 		                    <td>\${ls.changeDate}</td>
 	                    </td>

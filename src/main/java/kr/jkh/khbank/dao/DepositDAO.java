@@ -2,6 +2,7 @@ package kr.jkh.khbank.dao;
 
 
 import java.sql.Date;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -20,6 +21,8 @@ public interface DepositDAO {
 	MaturityDateVO getMaDate(@Param("num")int dsMdNum);
 
 	void UpdateDepositMaturity(@Param("num")int dsNum, @Param("date") Date maturityDate);
+
+	List<DepositVO> getDepositList();
 
 	 
 	

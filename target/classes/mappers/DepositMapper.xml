@@ -83,4 +83,8 @@
 <update id="UpdateDepositMaturity">
 	update depositSubscription set dsMaturity = #{date} where dsNum = #{num}
 </update>
+
+<select id="getDepositList" resultType="DepositVO">
+	select * from deposit order by dpNum limit 3
+</select>
 </mapper>

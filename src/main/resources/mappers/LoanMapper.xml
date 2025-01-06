@@ -62,6 +62,11 @@
     </association>
     
 </resultMap>
+<select id="getLoanAllList" resultType="LoanVO">
+	select * from loan order by laNum limit 3
+</select>
+
+
 <select id="selectLoanType" resultType="LoanTypeVO">
 	select * from loanType where ltNum = #{lsLtNum}
 </select>

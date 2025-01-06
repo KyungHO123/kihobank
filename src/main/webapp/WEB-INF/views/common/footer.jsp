@@ -16,6 +16,7 @@
 	<footer class="bg-dark text-white text-center py-4">
 		<div class="container">
 			<p class="mb-0">&copy; 2024 기호은행. 모든 권리 보유.</p>
+			<p class="mb-0">TEL : 010 - 4407 - 1418</p>
 		</div>
 	</footer>
 <!-- Bootstrap JS -->

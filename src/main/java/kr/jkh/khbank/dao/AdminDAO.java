@@ -80,6 +80,10 @@ public interface AdminDAO {
 	int getDpSubTotalCount(@Param("cri")Criteria cri);
 
 	int getLaSubTotalCount(@Param("cri")Criteria cri);
+
+	List<logVO> selectLogList(@Param("cri")Criteria cri);
+
+	int getLogTotalCount(@Param("cri")Criteria cri);
 	
 
 	 

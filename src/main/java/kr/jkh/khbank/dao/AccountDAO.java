@@ -11,6 +11,7 @@ import kr.jkh.khbank.model.vo.AccountVO;
 import kr.jkh.khbank.model.vo.MemberVO;
 import kr.jkh.khbank.model.vo.TransactionVO;
 import kr.jkh.khbank.model.vo.logVO;
+import kr.jkh.khbank.pagination.Criteria;
 
 public interface AccountDAO {
 
@@ -33,6 +34,12 @@ public interface AccountDAO {
 	AccountVO getMyAccount(@Param("num")int trAcHeadNum);
 
 	void saveTransaction(@Param("tr")TransactionVO transaction);
+
+	List<TransactionVO> selectTrList(@Param("cri")Criteria cri, @Param("ac")AccountVO ac);
+
+	int getTrTotalCount(@Param("cri")Criteria cri,@Param("ac") AccountVO ac);
+
+	void saveTransaction2(@Param("tr")TransactionVO tr);
 
 
 }

@@ -72,7 +72,7 @@
                         <div class="card-body">
                             <h5 class="card-title">로그인 로그</h5>
                             <p class="card-text">회원의 로그인 기록을 확인할 수 있습니다.</p>
-                            <a href="<c:url value='/admin/loginLogs' />" class="btn btn-primary">관리</a>
+                            <a href="<c:url value='/admin/log' />" class="btn btn-primary">관리</a>
                         </div>
                     </div>
                 </div>

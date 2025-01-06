@@ -93,6 +93,10 @@ public class LoanServiceImp implements LoanService {
 		// TODO Auto-generated method stub
 		return laDao.getLoanSubList();
 	}
+	@Override
+	public List<LoanVO> getLoanList() {
+		return laDao.getLoanAllList();
+	}
 
 
 
