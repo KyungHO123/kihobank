@@ -49,6 +49,8 @@ public interface LoanDAO {
 
 	List<LoanSubscriptionVO> getLoanSubList();
 
+	List<LoanVO> getLoanAllList();
+
 	
 	 
 

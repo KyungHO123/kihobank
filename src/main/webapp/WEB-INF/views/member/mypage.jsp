@@ -117,6 +117,8 @@
 	                    </div>
 	                    <input type="hidden" name="trName" id="trName">
 	                    <input type="hidden" name="trAcHeadNum" id="trAcHeadNum">
+	                    <input type="hidden" name="trMyAccount" id="trMyAccount" >
+	                    <input type="hidden" name="trSender" id="trSender" >
 	                    <button type="button" id="transaction" class="btn btn-primary w-100">이체하기</button>
 		            </div>
 		        </div>
@@ -211,13 +213,21 @@ const modal = new bootstrap.Modal(document.getElementById('editLoanModal'));
 			alert("계좌조회를 먼저 해주세요.");
 			return
 		}
+		let ac = {
+				acHeadNum : '${account.acHeadNum}',
+				acNum : '${account.acNum}',
+				acName : '${account.member.meName}'
+				
+		}
 		let tr = {
 			trAcNum : $("#trAcNum").val(),
 			trName : $("#trName").val(),
 			trMemo : $("#trMemo").val(),
 			trBalance : $("#trBalance").val(),
 			trAcHeadNum : $("#trAcHeadNum").val(),
-			trNum : $("#trNum").val()
+			trNum : $("#trNum").val(),
+			trMyAccount : ac.acNum,
+			trSender : ac.acName
 		}
 		if(!tr.trBalance){
 			alert("이체 금액을 입력하세요.");

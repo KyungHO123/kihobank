@@ -243,7 +243,7 @@
 		update account set acBalance = #{ac.acBalance} where
 		acHeadNum = #{ac.acHeadNum}
 	</update>
-	
+
 	<resultMap id="dpSubMap" type="DepositSubscriptionVO">
 		<id property="dsNum" column="dsNum" />
 		<result property="dsAccount" column="dsAccount" />
@@ -263,19 +263,24 @@
 			column="dsSsNum" select="selectDsSsNum" />
 	</resultMap>
 	<select id="selectDsSsNum" resultType="SubscriptionstateVO">
-		select * from Subscriptionstate where ssNum = #{dsSsNum}
+		select * from
+		Subscriptionstate where ssNum = #{dsSsNum}
 	</select>
 	<select id="selectDsMeID" resultType="MemberVO">
-		select * from member where meID = #{dsMeID}
+		select * from member where
+		meID = #{dsMeID}
 	</select>
 	<select id="selectDpNum" resultType="DepositVO">
-		select * from deposit where dpNum = #{dsDpNum}
+		select * from deposit where
+		dpNum = #{dsDpNum}
 	</select>
 	<select id="selectDpSubList" resultMap="dpSubMap">
-		select * from depositSubscription
+		select * from
+		depositSubscription
 		order by dsNum desc
 		limit
-		#{cri.pageStart}, #{cri.perPageNum}
+		#{cri.pageStart},
+		#{cri.perPageNum}
 	</select>
 
 	<select id="getDpSubTotalCount" resultType="int">
@@ -286,5 +291,16 @@
 	<select id="getLaSubTotalCount" resultType="int">
 		select count(*) from
 		loanSubscription
+	</select>
+	<select id="selectLogList" resultType="logVO">
+	select * from log join member on logMeID = meID where meMaNum = 1
+	order by
+	logNum desc
+	limit
+	#{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	<select id="getLogTotalCount" resultType="int">
+		select count(*) from
+		log
 	</select>
 </mapper>

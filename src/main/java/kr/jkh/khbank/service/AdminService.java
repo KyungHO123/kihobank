@@ -13,6 +13,7 @@ import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MemberAuthorityVO;
 import kr.jkh.khbank.model.vo.MemberStateVO;
 import kr.jkh.khbank.model.vo.MemberVO;
+import kr.jkh.khbank.model.vo.logVO;
 import kr.jkh.khbank.pagination.Criteria;
 
 public interface AdminService {
@@ -70,6 +71,10 @@ public interface AdminService {
 	int getDpSubTotalCount(Criteria cri);
 
 	int getLaSubTotalCount(Criteria cri);
+
+	List<logVO> selectLogList(Criteria cri);
+
+	int getLogTotalCount(Criteria cri);
 
 
 

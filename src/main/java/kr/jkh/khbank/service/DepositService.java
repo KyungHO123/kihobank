@@ -2,6 +2,7 @@ package kr.jkh.khbank.service;
 
 
 import java.sql.Date;
+import java.util.List;
 
 import kr.jkh.khbank.model.vo.DepositSubscriptionVO;
 import kr.jkh.khbank.model.vo.DepositVO;
@@ -18,6 +19,8 @@ public interface DepositService {
 	MaturityDateVO getMaturity(int dsMdNum);
 
 	void UpdateDepositMaturity(int dsNum, Date maturityDate);
+
+	List<DepositVO> getDepositList();
 
 	 
 

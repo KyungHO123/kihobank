@@ -27,6 +27,8 @@ public interface LoanService {
 	boolean loanRepay(LoanSubscriptionVO laSub);
 
 	List<LoanSubscriptionVO> getLoanSubList();
+
+	List<LoanVO> getLoanList();
  
 
 

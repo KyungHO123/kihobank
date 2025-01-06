@@ -18,6 +18,7 @@ import kr.jkh.khbank.model.vo.LoanVO;
 import kr.jkh.khbank.model.vo.MemberAuthorityVO;
 import kr.jkh.khbank.model.vo.MemberStateVO;
 import kr.jkh.khbank.model.vo.MemberVO;
+import kr.jkh.khbank.model.vo.logVO;
 import kr.jkh.khbank.pagination.Criteria;
 
 @Service
@@ -25,7 +26,7 @@ public class AdminServiceImp implements AdminService {
 
 	@Autowired
 	private AdminDAO adDao;
-	
+
 	@Override
 	public AccountVO selectMemberAccount(String meID) {
 		// TODO Auto-generated method stub
@@ -105,12 +106,12 @@ public class AdminServiceImp implements AdminService {
 	@Override
 	public ArrayList<MemberAuthorityVO> getMemberauthority() {
 		// TODO Auto-generated method stub
-		return adDao. getMemberauthority();
+		return adDao.getMemberauthority();
 	}
 
 	@Override
 	public boolean adminMemberUpdate(MemberVO member) {
-		if(member.getMeMaNum() <= 0 || member.getMeMsNum() <= 0) {
+		if (member.getMeMaNum() <= 0 || member.getMeMsNum() <= 0) {
 			return false;
 		}
 		System.out.println(member + "임플");
@@ -119,7 +120,7 @@ public class AdminServiceImp implements AdminService {
 
 	@Override
 	public ArrayList<MemberVO> getAjaxMemberList(Criteria cri) {
-		if(cri == null) {
+		if (cri == null) {
 			return null;
 		}
 		// TODO Auto-generated method stub
@@ -128,7 +129,7 @@ public class AdminServiceImp implements AdminService {
 
 	@Override
 	public int getTotalMemberCount(Criteria cri) {
-		if(cri == null) {
+		if (cri == null) {
 			return 0;
 		}
 		// TODO Auto-generated method stub
@@ -137,23 +138,23 @@ public class AdminServiceImp implements AdminService {
 
 	@Override
 	public boolean addDeposit(DepositVO deposit, MemberVO user) {
-		if(user == null || user.getMeMaNum() == 1)
+		if (user == null || user.getMeMaNum() == 1)
 			return false;
-		if(deposit == null)
+		if (deposit == null)
 			return false;
 		return adDao.addDeposit(deposit);
 	}
 
 	@Override
 	public ArrayList<DepositVO> getDepositList(Criteria cri) {
-		if(cri == null)
+		if (cri == null)
 			return null;
 		return adDao.getDepositList(cri);
 	}
 
 	@Override
 	public int getDpTotalCount(Criteria cri) {
-		if(cri == null)
+		if (cri == null)
 			return 0;
 		return adDao.getDpTotalCount(cri);
 	}
@@ -172,38 +173,38 @@ public class AdminServiceImp implements AdminService {
 
 	@Override
 	public boolean depositUpdate(DepositVO deposit) {
-		if(deposit == null)
+		if (deposit == null)
 			return false;
-		
+
 		return adDao.depositUpdate(deposit);
 	}
 
 	@Override
 	public boolean deleteDeposit(int dpNum) {
 		// TODO Auto-generated method stub
-		return  adDao.depositDelete(dpNum);
+		return adDao.depositDelete(dpNum);
 	}
 
 	@Override
 	public List<LoanSubscriptionVO> selectLaSubList(Criteria cri) {
-		if(cri == null)
+		if (cri == null)
 			return null;
 		return adDao.selectLaSubList(cri);
 	}
 
 	@Override
-	public boolean lsOk(LoanSubscriptionVO laSub,AccountVO ac) {
-		if(laSub == null) {
+	public boolean lsOk(LoanSubscriptionVO laSub, AccountVO ac) {
+		if (laSub == null) {
 			return false;
 		}
 		System.out.println(ac + "임플 어카운트");
 		boolean res = adDao.isOk(laSub);
 		int newBalance = (int) (ac.getAcBalance() + laSub.getLsAmount());
-		if(res) {
+		if (res) {
 			ac.setAcBalance(newBalance);
 			adDao.updateAccountBalance(ac);
 			adDao.addLoanRepayment(laSub);
-		}else {
+		} else {
 			return false;
 		}
 		return true;
@@ -217,7 +218,7 @@ public class AdminServiceImp implements AdminService {
 
 	@Override
 	public List<DepositSubscriptionVO> selectDpSubList(Criteria cri) {
-		if(cri == null)
+		if (cri == null)
 			return null;
 		// TODO Auto-generated method stub
 		return adDao.selectDpSubList(cri);
@@ -225,17 +226,30 @@ public class AdminServiceImp implements AdminService {
 
 	@Override
 	public int getDpSubTotalCount(Criteria cri) {
-		if(cri == null)
+		if (cri == null)
 			return 0;
 		return adDao.getDpSubTotalCount(cri);
 	}
 
 	@Override
 	public int getLaSubTotalCount(Criteria cri) {
-		if(cri == null)
+		if (cri == null)
 			return 0;
 		return adDao.getLaSubTotalCount(cri);
 	}
 
+	@Override
+	public List<logVO> selectLogList(Criteria cri) {
+		if (cri == null)
+			return null;
+		return adDao.selectLogList(cri);
+	}
+
+	@Override
+	public int getLogTotalCount(Criteria cri) {
+		if (cri == null)
+			return 0;
+		return adDao.getLogTotalCount(cri);
+	}
 
 }
